@@ -1,0 +1,6 @@
+<form class="bg-3-freelance-form" action="{% url 'freelance_added' %}" method="POST">
+
+  {{ form2.as_p }}
+  {% csrf_token %}
+<input type="submit" />
+</form>

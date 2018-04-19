@@ -1,0 +1,134 @@
+{% extends "job_base.html" %}
+
+
+{% block content %}
+
+{% load static %}
+
+
+<div class="container-fluid bg-1"><!-- 1st row -->
+    <div class="col-sm-12">
+      <div class="row title">
+          <h1>工時薪資透明化運動</h1>
+          <div class="content">
+          <h4>  分享你的真實工時、薪資資訊，讓我們一起改善工作資訊不透明的現況</h4>
+          </div>
+
+
+      </div>
+      <img src="{% static 'job/image/logo.gif' %}">
+    </div>
+</div>
+
+<div class="container-fluid bg-2">
+  <div class="row bg-2-title text-center">
+    <span class="glyphicon glyphicon-fire"></span>
+    <h1>關於工時薪資透明化</h1>
+    <h1>你是否和我們有一樣的經驗？</h1>
+  </div><!-- bg-2-title -->
+  <div class="row">
+      <div class="bg-2-content">
+        <div class="col-sm-4 text-center align-middle">
+          知道真正的工作資訊
+        </div>
+
+        <div class="col-sm-4 text-center">
+          做出更好的選擇
+        </div>
+
+        <div class="col-sm-4 text-center">
+          改善不透明狀況
+        </div>
+
+    </div><!-- bg-2-content -->
+  </div>
+
+
+
+</div>
+
+<div id="bg-3" class="container bg-3">
+  <h1>匿名參與工時薪資透明化運動</h1>
+
+
+{% if type %}
+    <a href="{% url 'freelance_form' %}#bg-3">我是自由業者</a>
+    {% include "form_2.html" %}
+{% else %}
+    <a href="{% url 'form' %}#bg-3">我有固定職業</a>
+    {% include "freelance_form.html" %}
+{% endif %}
+
+</div> <!-- .container -->
+
+<div class="container-fluid bg-4">
+  <div class="row">
+    <div class="col-sm-6 share text-center">
+      <h1>分享此活動</h1>
+      <button type="button" class="btn btn-default">Facebook</button>
+      <button type="button" class="btn btn-default">Twitter</button>
+      <h4>粉絲頁按讚，隨時取得最新消息</h4>
+    </div> <!-- share -->
+
+    <div class="col-sm-6 contact text-center">
+      <h1>與我們聯繫</h1>
+      <img class="icon img-circle" src="{% static 'job/image/icon-1.jpeg' %}">
+      <img class="icon img-circle" src="{% static 'job/image/icon-2.jpeg' %}">
+    </div><!-- contact -->
+  </div>
+</div>
+
+<div id="bg-5" class="container-fluid bg-5">
+<div class="row">
+
+  <div class="col-sm-2"></div>
+  <div class="col-sm-8">
+  <div class="text-center">
+    <span class="glyphicon glyphicon-question-sign"></span>
+    <h1>常見問答</h1>
+  </div>
+
+
+<b>這個網站是匿名的嗎？ 為什麼匿名還需要以 Facebook 帳戶驗證？</b>
+<p>是的，這個網站是匿名的，您的 Facebook 帳戶資訊不會於任何地方被顯示、揭露或分享。Facebook 帳戶驗證是為了避免惡意使用者大量輸入假資訊。目前設定每一個 Facebook 帳戶僅可以上傳 5 筆工時、薪資資訊，未來將視情況做調整。
+
+<p><b>我提供的資料會如何被使用？</b>
+
+<p>您的資料將會被運用於 GoodJob 團隊之服務中，供其他使用者查詢。未來也可能與其他工作資訊透明化專案合作，共享真實的工作資訊；但您的 Facebook 帳戶資訊並不會被共享。
+
+<p><b>我填錯了，想要刪除、修改資料怎麼辦？</b>
+<p>請填寫本表單，用以確保您是本人，也保障您的權益。填寫完畢後當週的週日，工程師會統一處理，感謝您的耐心等候。
+
+<p><b>哪裡可以查詢到工時、薪資的資訊?</b>
+<p>您可以在導覽列中，找到「查看薪時」的連結。
+
+<p><b>請問你們是誰？</b>
+<p>詳情請見關於我們。
+
+<p><b>如果我對這個專案很有興趣，想要一起貢獻心力或洽談合作，該怎麼做?</b>
+這是一個開源專案，我們期待與任何個人或團體洽談合作，請用 Facebook 聯絡我們。其中，若您有以下任一專長或條件，我們非常希望您可以加入我們！
+具網頁前端開發能力者 (React)
+有資訊設計專長者，以協助設計勞動權益資訊懶人包
+對於推動工作資訊透明化、改善台灣勞動環境具有熱忱的任何人</p>
+</div><!-- row -->
+<div class="col-sm-2"></div>
+</div><!-- row -->
+
+<div class="row">
+    <img src="{% static 'job/image/bottom-deco.gif'%}">
+</div><!-- row -->
+
+
+
+</div><!-- bg-5 -->
+
+<div class="container-fluid bg-6">
+  <div class="row">
+    使用者條款與隱私權政策 Emoji provided free by EmojiOne
+  </div>
+</div><!-- bg-6 -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="{% static 'job/jquery/job.js' %}"></script>
+
+{% endblock %}

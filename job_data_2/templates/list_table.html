@@ -1,0 +1,142 @@
+{% load template_filter %}
+<style>
+  tr:hover td {background:#eceae2}
+
+  /* input, select{
+    background: white;
+    border: 1px solid #b4b4b4;
+    width: 10%;
+    padding: 0 5px;
+    height: 45px;
+    line-height: 20px;
+  } */
+
+</style>
+
+{% for i in '15' %}
+  {{i}}
+{% endfor %}
+
+
+<div class="list_table">
+<div class="container latest-bg-2"><!-- 2st row -->
+  <div class="row">
+
+    <div class="col-lg-12 text-center">
+
+    <form action="{% url 'search' %}" method="GET">
+      {{form}}
+      <input type="submit" value="搜尋">
+    </form>
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
+
+  <div class="row text-center">
+    <h1>最新薪時資訊</h1>
+
+    <div class="rwd-td">
+    </div>
+
+
+    <table class="table table-inverse">
+      <tr>
+        <th>職稱</th>
+        <th>公司名稱</th>
+        <!-- <th>地點</th> -->
+        <th>地點</th>
+        <th>行業</th>
+        <th>薪資</th>
+        <!-- <th>工作時間</th> -->
+        <th>工作天</th>
+        <th>每週工作時數</th>
+      </tr>
+      {% for object in list %}
+
+
+
+
+      <tr class="blue">
+
+        <td><span class="rwd-td">職稱</span><a href="{{ object.get_absolute_url }}">{{ object.jobTitle }}</a></td>
+
+        <td><span class="rwd-td">公司名稱</span>{{ object.company }}<a href="http://127.0.0.1:8080/admin/job_data_2/labor_gov/{{object.id}}/change/"> edit </a></td>
+
+        <!-- <td><span class="rwd-td">地點</span><a href="#">{ object.treatment }}</a></td> -->
+
+        <td><span class="rwd-td">地點</span>{{ object.location2 }} </td>
+
+
+        <td><span class="rwd-td">行業</span><a href="search?keyword=&industry={{ object.industry }}&location=all&salary_type=&salary_filter=higher&salary=">{{ object.industry }}</a></td>
+        <td><span class="rwd-td">估計薪金</span>
+          {% if object.money %}
+          {{object.salary_type}}${{ object.money }}
+          {% else %}
+          {{ object.salary}}
+          {% endif %}
+
+        </td>
+
+        <!-- <td><span class="rwd-td">每天工作時間</span>{ object.working_hours }}</td> -->
+
+
+
+        <td><span class="rwd-td">每週工作天數</span>{{ object.working_day_number }}</td>
+
+        <td><span class="rwd-td">每週工作天數</span>{{ object.week_total_hour }}小時</td>
+
+
+
+
+      </tr>
+
+      {% endfor %}
+
+    </table>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if list.has_previous %}
+          {% if paginator_link %}
+            <a href="{{ paginator_link}}&page={{ list.previous_page_number }}">previous</a>
+          {% else %}
+            <a href="?page={{ list.previous_page_number }}">previous</a>
+          {% endif %}
+        {% endif %}
+
+        <span class="current">
+            Page {{ list.number }} of {{ list.paginator.num_pages }}.
+        </span>
+
+
+        {% if list.has_next %}
+          {% if paginator_link %}
+            {% if list.next_page_number > 0 %}
+            <a href="{{ paginator_link}}&page={{ list.next_page_number  }}">next</a>
+            {% endif %}
+
+          {% else %}
+            <a href="?page={{ list.next_page_number  }}">next</a>
+          {% endif %}
+        {% endif %}
+    </span>
+</div>
+<br>
+
+
+{% for page in show_page_list %}
+
+    {% if forloop.counter != 1 %} | {% endif %}
+    {% if paginator_link %}
+
+      <a href="{{ paginator_link}}&page={{page}}">{{ page }}</a>
+    {% else %}
+      <a href="?page={{page}}">{{ page }}</a>
+    {% endif %}
+{% endfor %}
+<br>
+<br>
+<br>
+  </div>
+</div>
+</div> <!-- list_table -->

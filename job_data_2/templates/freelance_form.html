@@ -1,0 +1,105 @@
+<form id="bg-3-freelance-form" class="bg-3-freelance-form" action="{% url 'test_form' %}" method="POST">
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">你是從事甚麼行業？</label>
+      行業
+      攝影
+      文字
+      藝術
+      設計
+      飲食
+      補習
+      其他：
+
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">工作形態</label>
+
+      全職freelance
+      兼職freelance
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">工作待遇（機構－工作項目－價錢，例：某某日報－評論－1000字－300元）</label>
+
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">有沒有發票</label>
+      有沒有發票
+      通常沒有
+      通常有
+      一直沒有
+      一直有
+      其他：
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">多久才收到錢？
+      </label>
+      一個月
+      三個月
+      半年
+      半年以上
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">有沒有合約</label>
+      通常沒有
+      通常有
+      一直沒有
+      一直有
+      其他：
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">有沒有曾經被走數</label>
+      沒有
+      一兩次
+      間中有
+      經常有
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">有沒有曾經為工作而自己付錢？（如：買書、交通）</label>
+      間中
+      經常
+      從不
+      {{ form.industry }}
+  </div>
+
+  <div class="form-group">
+      {{ form.industry.errors }}
+      <label for="{{ form.industry.id_for_label }}">有沒有曾在無保障下做高危工作？（如沒有勞工保險下衝突場面採訪）</label>
+      間中
+      經常
+      從不
+      {{ form.industry }}
+  </div>
+
+<input class="date" type="hidden" name="date" value= {{ date }}>
+
+{% csrf_token %}
+
+<button type='button' class="increase">增加欄位 </button>
+
+<input type="submit" value="提交表格" /><br>
+
+
+</form>

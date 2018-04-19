@@ -1,0 +1,48 @@
+{% extends "job_base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container-fluid latest-bg-1"><!-- 1st row -->
+  <div class="row">
+    <div class="box">
+    <h1> 查看工時、薪資</h1>
+    <a href="{% url 'jobs_gov_data_latest' %}">最新資料</a>
+    <a href="{% url 'jobs_gov_data_work-time-dashboard' %}">工時排行</a>
+    <a href="{% url 'jobs_gov_data_salary-dashboard' %}">時薪排行</a>
+  </div>
+    <img src="{% static 'image/check_banner.jpg'%}">
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+<!-- <table>
+{ for x in industry_statistic %}
+
+    <tr>
+      <td>{{x.industry}}</td>
+      <td>{{x.industry__count}}</td>
+      <td>{{x.show_number}}</td>
+    </tr>
+{ endfor %}
+</table> -->
+  </div>
+</div>
+
+<!-- { for x in category_list%}
+  {{ x }}
+{ endfor %} -->
+
+{% include 'list_table.html' %}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script>
+// using jQuer
+var ajax_order = "{% url 'ajax_order' %}"
+</script>
+
+<script src='{% static "job/jquery/order_ajax.js" %}'></script>
+
+
+{% endblock %}

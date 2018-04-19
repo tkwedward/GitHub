@@ -1,0 +1,18 @@
+
+<form id="bg-3-form" class="bg-3-form" action="{% url 'added' %}" method="POST">
+
+{{ form.as_p }}
+{% csrf_token %}
+<input type="submit" value="提交表格" />
+
+{% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+              <li class="{{ message.tags }}">
+                  {{ message|safe }}
+                  <a href="#" class="close">×</a>
+              </li>
+          {% endfor %}
+      </ul>
+{% endif %}
+</form>

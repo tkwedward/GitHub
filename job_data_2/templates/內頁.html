@@ -1,0 +1,252 @@
+{% extends "job_base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container-fluid latest-bg-1"><!-- 1st row -->
+  <div class="row">
+    <div class="box">
+    <h1> 查看工時、薪資</h1>
+    <a href="#">最新資料</a>
+    <a href="#">工時排行</a>
+    <a href="#">時薪排行</a>
+  </div>
+    <img src="{% static 'image/check_banner.jpg'%}">
+  </div>
+</div>
+
+
+<div class="container latest-bg-2"><!-- 2st row -->
+
+
+  <div class="row text-center">
+    <h1>{{instance.jobTitle}}</h1>
+<br>
+<table class="detail">
+<tr class='detail_odd'>
+  <td>職稱:</td>
+  <td>{{instance.jobTitle}}</td>
+</tr>
+
+<tr class='detail_even'>
+  <td>公司:</td><td>{{instance.company}}</td>
+</tr>
+
+<tr class='detail_odd'>
+<td>地點︰</td><td>{{instance.location2}}</td>
+</tr>
+
+<tr class='detail_even'>
+  <td>money:</td>
+  <td>
+    {% if model == 'labor_gov' %}
+      {{instance.salary_type}} ${{instance.money}}
+    {% else %}
+      {{instance.salary}}
+    {% endif %}
+  </td>
+  </tr>
+
+<tr class='detail_odd'>
+  <td>組別:</td><td>{{instance.category}}</td>
+  </tr>
+
+<tr class='detail_even'>
+  <td>每周工時(week_total_hour):</td><td> {{instance.week_total_hour}}</td>
+</tr>
+
+<tr class='detail_odd'>
+  <td>工作天: </td><td>{{instance.working_week}}</td>
+  </tr>
+
+<tr class='detail_even'>
+<td>工作天數(working_day_number, 即每週工作多少天):</td><td> {{instance.working_day_number}}</td>
+</tr>
+
+<tr class='detail_odd'>
+<td>工作時間(working_hours, 即每天從幾點做到幾點):</td><td> {{instance.working_hours}}</td>
+</tr>
+
+<tr class='detail_even'>
+
+<td>工作時數(working_hours_number, 即每天工作多少小時):</td><td> {{instance.working_hours_number}}</td>
+</tr>
+
+<tr class='detail_odd'>
+<td>工作時數(數字, working_hours_number_float):</td><td> {{instance.working_hours_number_float}}</td>
+</tr>
+
+<tr class='detail_even'>
+<td>工作天數(數字, working_day_number_float):</td><td> {{instance.working_day_number_float}}</td>
+</tr>
+
+<tr class='detail_odd'>
+<td>輪班(working_shift):</td><td> {{instance.working_shift}}</td>
+</tr>
+
+
+<tr class='detail_even'>
+<td>工作時數(responsibility):</td><td> {{instance.treatment}}</td>
+</tr>
+
+
+</table>
+<a href="http://127.0.0.1:8080/admin/job_data_2/labor_gov/{{instance.id}}/change/"> edit </a>
+
+{% if model == 'labor_gov' %}
+<br>最低︰{{minimum.minimum|floatformat:2}}
+<br>平均︰{{average.average|floatformat:2}}
+<br>最高︰{{maximum.maximum|floatformat:2}}
+{% endif %}
+
+<table>
+  {% for mykey,myvalue in classification.items %}
+  <tr>
+    <td>{{mykey}}</td><td>{{myvalue}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{{json_classification|safe}}
+<script>
+  var data = {{json_classification|safe}}
+</script>
+
+<br>
+<br>
+<br>
+<svg class='graph' width='900' height='500'></svg>
+  </div>
+
+
+</div> <!-- class="container latest-bg-2" -->
+
+<div id='holder'></div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+
+<script>
+
+
+var svg = d3.select('svg')
+
+// [0-5, 5-10, ...]
+var object_array = $.map(data, d=>[d.range])
+
+var number_max = d3.max(data, d=>d.number)
+
+var xScale = d3.scaleOrdinal()
+                .domain([0,500])
+                .range([0,740])
+
+var yScale = d3.scaleLinear().domain([0, number_max]).range([300, 0])
+
+var width = 960,
+ height = number_max;
+bar_width = 50
+
+svg.append('g')
+   .attr('class', 'chart_group')
+   .attr('transform', 'translate(0,100)')
+
+svg.select('.chart_group')
+   .selectAll('rect.bar')
+    .data(data)
+    .enter().append('rect')
+    .attr('transform', 'translate(50,0)')
+    .classed('bar', true)
+    .attr('x', (d, i) => i*bar_width)
+    .attr('width', 30)
+    .attr('y', d=> yScale(d.number))
+    .attr('height', d=> yScale(height-d.number) )
+    .style('fill', d => d.color);
+
+// line_height = [0, 20, 40, 60, 80, 100]
+// line_height_2 = line_height.forEach(d=>d*3)
+// svg.select('.chart_group')
+//   .selectAll('line')
+//   .data(line_height)
+//   .enter()
+//   .append('line')
+//   .attr('x1','0')
+//   .attr('x2',width)
+//   .attr('y1',d=>d*5)
+//   .attr('y2',d=>d*5)
+//   .attr("stroke-width", 0.5)
+//   .attr("stroke", "black");
+
+svg.select('.chart_group')
+   .append('text')
+   .text('小時')
+   .attr('x',width/2-width/10)
+   .attr('y',340)
+
+svg.append('text')
+  .text('與所有「{{ category }}」組別工時相比')
+  .attr('x',width/2-width/5.5)
+  .attr('y',40)
+  .style("font-size", "20px")
+
+
+svg.select('.chart_group')
+  .selectAll('rect.bar')
+  .select('text')
+  .data(data)
+  .enter().append('text')
+  .text(d=>d.range)
+  .attr('x', (d,i)=>i*bar_width+50)
+  .attr('y',318)
+  .style("font-size", "10px")
+
+
+yAxis = d3.axisLeft()
+          .scale(yScale)
+
+// xAxis = d3.axisBottom()
+
+d3.select('svg')
+  .select('.chart_group')
+  .append('g')
+  .attr('transform', 'translate(40,00)')
+  .attr('id', 'yAxisG')
+  .call(yAxis)
+
+  d3.select('svg')
+    .select('.chart_group')
+    .append('text')
+    .text('人數')
+    .attr('x', 10)
+    .attr('y',-10)
+
+
+// d3.select('svg')
+//   .append('g')
+//   .attr('transform', 'translate(35,260)')
+//   .attr('id', 'xAxisG')
+//   .call(xAxis)
+
+
+
+var fullWidth = 600;
+var fullHeight = 250;
+var margin = {
+  top: 15,
+  right: 15,
+  left: 50,
+  bottom: 50
+};
+
+// var xScale = d3.scaleTime()
+//                .domain([new Date(1910, 0, 1), (new Date(2010, 0, 1))])
+//                .range([0, width]);
+
+</script>
+
+
+
+{% endblock %}
+
+
+
+</body>

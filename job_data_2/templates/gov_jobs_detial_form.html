@@ -1,0 +1,40 @@
+{% for x in match %}
+  {{x}}<br>
+{% endfor %}
+
+{{number_found}}<br>
+
+{% for x in list %}
+  {{x.id}}<br>
+  <!-- {{x.number}}<br> -->
+  <!-- {{x.date}}<br> -->
+  職稱: {{x.jobTitle}}<br>
+  公司:{{x.company}}<br>
+  地點:{{x.location2}}<br>
+  treatment: {{x.treatment}}<br>
+  錢: {{x.money3}}<br>
+  錢float: {{x.money}}<br>
+  種類: {{x.salary_type}}<br>
+  工作天(數字, working_date): {{x.working_date}}<br>
+  工作天數(數字, working_day_number): {{x.working_day_number}}<br>
+  工作小時(數字, working_hours_number): {{x.working_hours_number}}<br>
+  工作周(數字, working_week): {{x.working_week}}<br>
+  工作時數(數字, working_hours_number_float): {{x.working_hours_number_float}}<br>
+  工作天數(數字, working_day_number_float): {{x.working_day_number_float}}<br>
+  每周工時(week_total_hour): {{x.week_total_hour}}<br>
+  <br>
+{% endfor %}
+
+
+<ul class="pagination nav navbar-nav">
+   {% if list.has_previous %}
+           <li><a href="?page={{ objects.previous_page_number }}">Prev</a></li>
+   {% endif %}
+   {% for page in list.paginator.page_range %}
+       <li class="{% if objects.number == page  %}active{% endif %}"><a href="?page={{page }}">{{ page }}</a></li>
+   {% endfor %}
+
+   {% if list.has_next %}
+       <li> <a href="?page={{ objects.next_page_number }}">Next</a></li>
+   {% endif %}
+</ul>

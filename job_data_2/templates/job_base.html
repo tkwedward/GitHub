@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>惟工新聞|工時薪資透明化運動</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'job/css/job.css' %}" />
+
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="glyphicon glyphicon-menu-hamburger">
+
+      </button>
+
+      <a class="navbar-brand" href="{% url 'form' %}">屌老闆</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="{% url 'form' %}#bg-3">開始參與</a></li>
+      <li><a href="{% url 'jobs_gov_data' %}">查看時薪</a></li>
+      <li><a href="{% url 'form' %}#bg-5">常見問題</a></li>
+      <li><a href="#">關於我們</a></li>
+      <li><a href="#">{{ sam }}</a></li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      {% if user.is_authenticated %}
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> {{user.username }}</a></li>
+      <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span> 登出 </a></li>
+      {% else %}
+      <li><a href="{% url 'signup' %}"><span class="glyphicon glyphicon-user"></span> 登記</a></li>
+      <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in"></span> 登入</a></li>
+      {% endif %}
+
+
+
+    </ul>
+
+  </div>
+</div>
+</nav>
+{{user_id}}
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
