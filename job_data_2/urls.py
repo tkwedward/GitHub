@@ -1,10 +1,12 @@
 #coding:utf-8#-*-
 
 from django.conf.urls import url
-from .views import homepage, get_name_2, added, search,  Freelance_add, jobs_gov_data, jobs_gov_data_detail, ajax_order, add_json_data, get_search, success
+from .views import homepage, get_name_2, added, search,  Freelance_add, jobs_gov_data, jobs_gov_data_detail, ajax_order, add_json_data, get_search, success, about_us
 
 
 urlpatterns = [
+    url(r'^about_us$', about_us, name="about_us"),
+
     #第一頁︰用來給人填資料
     url(r'^form$', homepage, name="form"),
     url(r'^form/freelance$', get_name_2, name="freelance_form"),

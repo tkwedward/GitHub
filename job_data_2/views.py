@@ -19,9 +19,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from collections import OrderedDict
 # 製造頁面
 from itertools import chain
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 
 collected_data_model = collected_data.objects.all()
 labor_gov_model = labor_gov.objects.exclude(working_hours_number=None).exclude(working_hours_number='').exclude(week_total_hour=0.0)
@@ -30,9 +28,15 @@ labor_gov_model = labor_gov.objects.exclude(working_hours_number=None).exclude(w
 def homepage(request):
     form = ContactForm()
     form2 = Search_Bar_Form()
-    user = request.user
-    user_id = user.social_auth.get(provider='facebook').uid
-    return render(request, 'name.html', {'form': form, 'form2':form2, 'type':'normal', 'user':user, 'user_id':user_id})
+    # user = request.user
+    # user_id = user.social_auth.get(provider='facebook').uid
+    user = ""
+    user_id=""
+    return render(request, 'WKnews_web_draft 3_1.htm', {'form': form, 'form2':form2, 'type':'normal'})
+    # return render(request, 'name.html', {'form': form, 'form2':form2, 'type':'normal', 'user':user, 'user_id':user_id})
+
+def about_us(request):
+    return render(request, 'about_us.htm', {})
 
 def get_name_2(request):
     form = FreelanceForm()
@@ -117,7 +121,8 @@ def jobs_gov_data(request):
 # bookmark
     # return render(request, 'gov_jobs_detial.html', {'list': data_show})
 
-    return render(request, 'list_view2.html', {'list': data_show, 'form': search_form, 'category_list':CATEGORY_CHOICES, 'show_page_list':show_page_list})
+    return render(request, 'search_page.htm', {'list': data_show, 'form': search_form, 'category_list':CATEGORY_CHOICES, 'show_page_list':show_page_list})
+    # return render(request, 'list_view2.html', {'list': data_show, 'form': search_form, 'category_list':CATEGORY_CHOICES, 'show_page_list':show_page_list})
 
 def jobs_gov_data_detail(request, model_name, id):
     if model_name == 'collected_data':

@@ -1,0 +1,37 @@
+#id_company, #id_jobTitle {
+  width: 267px; }
+
+#id_industry {
+  width: 186px; }
+
+#id_latest_year {
+  width: 530; }
+
+#id_contract_hour {
+  width: 288px; }
+
+input {
+  -webkit-appearance: textfield;
+  background-color: RGB(252, 238, 33);
+  -webkit-rtl-ordering: logical;
+  cursor: text;
+  padding: 0px;
+  border-width: 0px;
+  border-style: inset;
+  border-color: initial;
+  border-image: initial;
+  height: 26px;
+  padding: 5px; }
+
+select {
+  background-color: RGB(252, 238, 33);
+  border-width: 0px;
+  border-style: solid;
+  border-color: RGB(252, 238, 33);
+  border-image: initial;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 26px;
+  padding: 5px; }
+
+/*# sourceMappingURL=open_job_form.css.map */
