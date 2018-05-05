@@ -1,11 +1,16 @@
 {% load static %}
-<div class="navbar">
-  <div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_01.jpg' %}); position:absolute; left:0px; top:0px; width:1280px; height:52px;" title="">
 
+<script src="https://use.typekit.net/bot8dtz.js"></script>
+<script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+<div class="navbar">
+  <div style="background:RGB(83,71,65); position:absolute; left:0px; top:0px; width:1280px; height:42px;" title="">
   </div>
-  <div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_02.jpg' %}); position:absolute; left:0px; top:12px; width:139px; height:29px;" title="">
+  <div class="logo" style=" position:absolute; left:0px; top:0px; width:400px; height:52px;" title="">
+    <img style='height:42px' src="{% static 'job/image/images/wklogog2.jpg' %}"/>
   </div>
-  <div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_03.jpg' %}); position:absolute; left:139px; top:12px; width:400px; height:35px;" title="">
+
+  <div style=" position:absolute; left:139px; top:8px; width:400px; height:35px;" title="">
     <a href="{% url 'form' %}">工資時薪透明化運動</a>
     <a href="{% url 'jobs_gov_data' %}">查看時薪</a>
     <a href="{% url 'about_us' %}">關於我們</a>

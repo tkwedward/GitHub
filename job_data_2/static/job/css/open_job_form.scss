@@ -1,45 +1,26 @@
-#id_company, #id_jobTitle{
-  width:267px
+#id_gender{
+  width: 66px;
+}
+#id_salary_period, #id_OT_frequency{
+  width: 104px;
 }
 
-#id_industry{
+#id_industry, #id_place{
   width:186px;
 }
 
-
-#id_latest_year{
-  width: 530;
+#id_company, #id_jobTitle{
+  width:267px
 }
 
 #id_contract_hour{
   width: 288px;
 }
 
-
-
-input {
-  -webkit-appearance: textfield;
-  background-color: RGB(252, 238, 33);
-  -webkit-rtl-ordering: logical;
-  cursor: text;
-  padding: 0px;
-  border-width: 0px;
-  border-style: inset;
-  border-color: initial;
-  border-image: initial;
-  height: 26px;
-  padding: 5px;
+#id_latest_year{
+  width: 530px;
 }
 
-select{
-  background-color: RGB(252, 238, 33);
-  border-width: 0px;
-  border-style: solid;
-  border-color: RGB(252, 238, 33);
-  border-image: initial;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  height: 26px;
-  padding: 5px;
-
+.submit{
+  font-size:27px;
 }

@@ -78,8 +78,10 @@ class collected_data(models.Model):
 
     jobTitle = models.CharField(max_length=50)
 
+    # 地點
     location2 = models.CharField(max_length=50, blank=True)
 
+    # 工作形態
     job_type = models.CharField(max_length=50, choices=TYPES_CHOICES)
 
     gender = models.CharField(max_length=5, choices=SEX_CHOICES)
@@ -96,7 +98,7 @@ class collected_data(models.Model):
 
     OT_payment = models.CharField(max_length=50, choices=OTP_CHOICES)
 
-    email = models.EmailField()
+    email = models.EmailField(blank=True, null=True)
 
     date = models.DateField(default=datetime.today())
 

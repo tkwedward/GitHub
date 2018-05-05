@@ -26,7 +26,42 @@ labor_gov_model = labor_gov.objects.exclude(working_hours_number=None).exclude(w
 # labor_gov_model = labor_gov.objects.all()
     # 第一頁
 def homepage(request):
-    form = ContactForm()
+    form = ContactForm(
+        initial={
+        'company': '世紀帝國',
+        'industry':'商用服務業',
+        # 職位名稱
+        'jobTitle':'巨投',
+        # 工作地點
+        'place':'東區',
+        # 職務型態
+        'job_type':'全職',
+        #工作天數
+        'date_number':'10',
+        # 性別
+        'gender':'f',
+        # 你最近從事這份工作的年份
+        'latest_year':2015,
+        # 支薪周期
+        'salary':'1',
+        'salary_period':'月薪',
+        # 行業年資
+        'year':9000,
+        # 合約列明一周工時
+        'contract_hour':10,
+        # 每周工時
+        'week_total_hour':10,
+
+        # 超時
+        'OT_payment':'絕少',
+
+        # 加班補償
+        'OT_frequency': '有',
+
+        #
+        # week_total_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '一周實際工時'}))
+
+        })
     form2 = Search_Bar_Form()
     # user = request.user
     # user_id = user.social_auth.get(provider='facebook').uid
@@ -59,9 +94,46 @@ def Freelance_add(request):
 @require_POST
 def added(request):
     form = ContactForm(request.POST)
+
     if form.is_valid():
-        form.save()
-        return redirect('success')
+        print(form.cleaned_data['week_total_hour'])
+        # category_model = labor_gov_model.filter(category=form.cleaned_data['industry'])
+        category_model = labor_gov_model.filter(industry='商用服務業')
+        print(category_model)
+    #
+        average = category_model.aggregate(average=Avg('week_total_hour'))
+        maximum = category_model.aggregate(maximum=Max('week_total_hour'))
+        minimum = category_model.aggregate(minimum=Min('week_total_hour'))
+        print(minimum)
+        model = labor_gov.objects.all()
+
+        """傳送的data︰
+        時間︰min, max, average
+        組別︰category
+        """
+        range_min = int(math.floor(float(minimum['minimum'])))
+        range_max = int(math.ceil(float(maximum['maximum'])))
+        classification = []
+        # print len(category_model)
+
+
+        step = 5
+        instance_hour = float(form.cleaned_data['week_total_hour'])
+        for x in range(1, range_max, step):
+            if instance_hour>=x-1 and instance_hour<x+4:
+                color = 'RGB(247,147,30)'
+            else:
+                color = 'RGB(252, 238, 33)'
+
+            length = len(category_model.filter(week_total_hour__gte=float(x-1)).filter(week_total_hour__lt=float(x+4)))
+            classification.append({'range':'{}-{}'.format(x-1, x+4), 'number':length, 'color':color})
+
+            json_classification = json.dumps(classification)
+            # print json_classification
+
+        return render(request, 'analysis.html', {'form': form.cleaned_data, 'json_classification':json_classification, 'category': form.cleaned_data['industry']})
+        # {'instance': instance, 'average':average, 'maximum':maximum, 'minimum':minimum, 'classification':classification, 'json_classification':json_classification, 'model':model_name, 'category': instance.category})
+
     else:
         print(form.errors)
 
@@ -71,7 +143,6 @@ def success(request):
     return HttpResponse('success')
 
 def jobs_gov_data(request):
-
     categories_list = labor_gov_model.values_list('category').distinct()
     CATEGORY_CHOICES = list()
     for x in categories_list:
@@ -92,7 +163,7 @@ def jobs_gov_data(request):
     # data_list = labor_gov.objects.all()
 
     """paginator"""
-    paginator = Paginator(data_list, 25) # Show 25 contacts per page
+    paginator = Paginator(data_list, 10) # Show 25 contacts per page
 
     page = request.GET.get('page')
 
@@ -157,9 +228,9 @@ def jobs_gov_data_detail(request, model_name, id):
         instance_hour = float(instance.week_total_hour)
         for x in range(1, range_max, step):
             if instance_hour>=x-1 and instance_hour<x+4:
-                color = 'red'
+                color = 'RGB(247,147,30)'
             else:
-                color = 'green'
+                color = 'RGB(252, 238, 33)'
 
             length = len(category_model.filter(week_total_hour__gte=float(x-1)).filter(week_total_hour__lt=float(x+4)))
             classification.append({'range':'{}-{}'.format(x-1, x+4), 'number':length, 'color':color})
@@ -175,7 +246,8 @@ def jobs_gov_data_detail(request, model_name, id):
             # print json_classification
 
 
-    return render(request, '內頁.html', {'instance': instance, 'average':average, 'maximum':maximum, 'minimum':minimum, 'classification':classification, 'json_classification':json_classification, 'model':model_name, 'category': instance.category})
+    return render(request, 'overlay.html', {'instance': instance, 'average':average, 'maximum':maximum, 'minimum':minimum, 'classification':classification, 'json_classification':json_classification, 'model':model_name, 'category': instance.category})
+    # return render(request, '內頁.html', {'instance': instance, 'average':average, 'maximum':maximum, 'minimum':minimum, 'classification':classification, 'json_classification':json_classification, 'model':model_name, 'category': instance.category})
 
 
 # @login_required
@@ -213,12 +285,13 @@ def get_search(request, position=None, industry=None, location=None, salary=None
     position = request.GET.get('keyword')
     industry = request.GET.get('industry')
     location = request.GET.get('location')
-    salary = request.GET.get('salary')
+    salary_up = request.GET.get('input-with-keypress-0')
+    salary_low = request.GET.get('input-with-keypress-1')
     salary_type = request.GET.get('salary_type')
-    salary_filter = request.GET.get('salary_filter')
-    data_get_list = [position, industry, location, salary, salary_type]
+    data_get_list = [position, industry, location, salary_up, salary_low, salary_type]
+    print (data_get_list)
 
-    paginator_link = "?keyword={}&industry={}&location={}&salary_type={}&salary={}&salary_filter={}".format(position, industry, location, salary_type, salary, salary_filter)
+    paginator_link = "?keyword={}&industry={}&location={}&salary_type={}&salary_up={}&salary_low={}".format(position.encode('utf8'), industry, location.encode('utf8'), salary_type.encode('utf8'), salary_up, salary_low)
 
     data_list = labor_gov_model
     # return HttpResponse(data_get_list)
@@ -231,14 +304,11 @@ def get_search(request, position=None, industry=None, location=None, salary=None
         data_list = data_list.filter(location2=location)
     if salary_type:
         data_list = data_list.filter(salary_type=salary_type)
-    if salary:
-        if salary_filter=='higher':
-            data_list = data_list.filter(money__gte=salary)
-        if salary_filter=='lower':
-            data_list = data_list.filter(money__lte=salary)
+    if salary_up and salary_low:
+        data_list = data_list.filter(money__gte=salary_low).filter(money__lte=salary_up)
 
     """paginator"""
-    paginator = Paginator(data_list, 25) # Show 25 contacts per page
+    paginator = Paginator(data_list, 10) # Show 25 contacts per page
 
     page = request.GET.get('page')
     if page is None:
@@ -265,9 +335,9 @@ def get_search(request, position=None, industry=None, location=None, salary=None
         data_show = paginator.page(paginator.num_pages)
 # bookmark
     # return render(request, 'gov_jobs_detial.html', {'list': data_show})
-    return render(request, 'list_view2.html', {'list': data_show, 'form':search_form, 'paginator_link':paginator_link, 'show_page_list':show_page_list})
-        # return HttpResponse(abc)
-            # return render(request, 'list_view2.html', {'list': data_show, 'form':search_form})
+    # return render(request, 'list_view2.html', {'list': data_show, 'form':search_form, 'paginator_link':paginator_link, 'show_page_list':show_page_list})
+    return render(request, 'search_page.htm', {'list': data_show, 'form':search_form, 'paginator_link':paginator_link, 'show_page_list':show_page_list})
+
 
 def search(request):
     if request.method == "POST":

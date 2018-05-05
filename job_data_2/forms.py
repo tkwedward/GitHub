@@ -78,38 +78,46 @@ class ContactForm(forms.ModelForm):
 
     industry = forms.ChoiceField(widget=forms.Select(), choices=INDUSTRY_LIST, label='', initial='all')
 
+    # 職位名稱
     jobTitle = forms.CharField(widget=forms.TextInput(attrs={ 'placeholder': '職位名稱'}))
 
+    # 工作地點
     place = forms.ChoiceField(widget=forms.Select(), choices=DISTRICT_LIST, label='', initial='all')
 
+    # 職務型態
     job_type = forms.ChoiceField(widget=forms.Select(), choices=TYPES_CHOICES, label='', initial='')
 
-    gender=forms.ChoiceField(widget=forms.Select(), choices=SEX_CHOICES, label='', initial='')
-
-     # forms.CharField(widget=forms.TextInput(attrs={'placeholder':'工作形態'}))
-
+     # 工作天數
     date_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '工作天數'}))
 
+
+    # 性別
+    gender=forms.ChoiceField(widget=forms.Select(), choices=SEX_CHOICES, label='', initial='')
+
+    # 你最近從事這份工作的年份
     latest_year = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '你最近從事這份工作的年份（例如由2014年做到2016年，請填2016；如現正從事這份工作，請填2017年）'}))
 
+
+    # 支薪周期
+    salary_period = forms.ChoiceField(widget=forms.Select(), choices=SALARY_TYPE_LIST, label='')
+
+    # 行業年資
     year = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '行業年資'}))
 
+    # 合約列明一周工時
     contract_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '合約列明一周工時（如沒有合約或沒有標明，請填0）'}))
-
-    salary_period = forms.ChoiceField(widget=forms.Select(), choices=SALARY_TYPE_LIST, label='')
 
     OT_payment = forms.ChoiceField(widget=forms.Select(), choices=OTP_CHOICES, label='')
 
+    #
     OT_frequency = forms.ChoiceField(widget=forms.Select(), choices=OT_CHOICES)
-# widget=forms.TextInput(attrs={'placeholder': '職位'})
+
+    week_total_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '一周實際工時'}))
+    date = forms.DateField(initial=datetime.today())
     class Meta:
         model = collected_data
         widgets = {
             'salary': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '薪資'}),
-
-
-
-            'working_hour': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '一周實際工時'}),
 
             'email': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '電郵'}),
 

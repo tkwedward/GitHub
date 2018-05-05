@@ -3,4 +3,39 @@
   text-decoration: none;
   margin-right: 10px; }
 
+input {
+  -webkit-appearance: textfield;
+  background-color: RGB(252, 238, 33);
+  -webkit-rtl-ordering: logical;
+  cursor: text;
+  padding: 0px;
+  border-width: 0px;
+  border-style: inset;
+  border-color: initial;
+  border-image: initial;
+  height: 26px;
+  padding: 5px; }
+
+select {
+  background-color: RGB(252, 238, 33);
+  border-width: 0px;
+  border-style: solid;
+  border-color: RGB(252, 238, 33);
+  border-image: initial;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 26px;
+  padding: 5px; }
+
+.job_row_box {
+  background: RGB(83, 71, 65);
+  font-size: 12px;
+  color: RGB(252, 238, 33); }
+  .job_row_box a {
+    text-decoration: none;
+    color: RGB(252, 238, 33); }
+
+div {
+  font-family: "source-han-serif-tc"; }
+
 /*# sourceMappingURL=general.css.map */
