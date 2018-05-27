@@ -1,0 +1,81 @@
+
+<div class="close-button" onclick="off()" style="position:absolute; left:1100px; top:20px; width:22px; height:22px; font-size:22px">
+	&#10006;
+</div>
+
+<div class="search_list">
+  <div class='overlay-button-label' style=" position:absolute; left:378px; top:34px; width:268px; height:26px;" title="">
+    公司名稱
+  </div>
+  <div class='overlay-button overlay-company' style=" position:absolute; left:378px; top:60px; width:268px; height:26px;" title="">
+    <!-- {{instance.company}} -->
+  </div>
+
+
+  <div class='overlay-button-label' style="position:absolute; left:654px; top:34px; width:187px; height:26px;" title="">
+    行業
+	</div>
+  <div class='overlay-button overlay-industry' style="position:absolute; left:654px; top:60px; width:187px; height:26px;" title="">
+    {{instance.category}}
+	</div>
+
+  <div class='overlay-button-label' style="position:absolute; left:378px; top:90px; width:268px; height:26px;" title="">
+  職位名稱
+  </div>
+  <div class='overlay-button overlay-jobTitle' style="position:absolute; left:378px; top:116px; width:268px; height:26px;" title="">
+    {{instance.jobTitle}}<!-- 職位名稱 -->
+	</div>
+
+  <div class='overlay-button-label' style="position:absolute; left:654px; top:90px; width:187px; height:26px;" title="">
+    工作地點
+	</div>
+  <div class='overlay-button overlay-location2' style="position:absolute; left:654px; top:116px; width:187px; height:26px;" title="">
+    {{instance.location2}}
+	</div>
+
+  <div class='overlay-button-label' style="position:absolute; left:378px; top:146px; width:153px; height:26px;" title="">
+    薪金
+	</div>
+  <div class='overlay-button overlay-salary_type' style="position:absolute; left:378px; top:172px; width:153px; height:26px;" title="">
+    {% if model == 'labor_gov' %}
+      {{instance.salary_type}} ${{instance.money}}
+    {% else %}
+      {{instance.salary}}
+    {% endif %}
+	</div>
+
+  <div class='overlay-button-label' style="position:absolute; left:540px; top:146px; width:108px; height:26px;" title="">
+    每週工作時數
+	</div>
+  <div class='overlay-button overlay-week_total_hour' style="position:absolute; left:540px; top:172px; width:108px; height:26px;" title="">
+    {{instance.week_total_hour}}
+	</div>
+
+  <div class='overlay-button-label' style="position:absolute; left:657px; top:146px; width:108px; height:26px;" title="">
+    每週工作天數
+	</div>
+  <div class='overlay-button overlay-working_day_number' style="position:absolute; left:657px; top:172px; width:108px; height:26px;" title="">
+    {{instance.working_day_number}}
+	</div>
+
+  <div class='overlay-button-label' style="position:absolute; left:773px; top:146px; width:129px; height:26px;" title="">
+    一周實際時薪
+	</div>
+  <div class='overlay-button overlay-week_salary' style="position:absolute; left:773px; top:172px; width:129px; height:26px;" title="">
+    一周實際時薪
+	</div>
+</div> <!-- search list -->
+
+
+<!-- start 中間東西 -->
+<svg class='title_1 graph-detail' style="position:absolute; left:533px; top:254px; width:240px; height:20px;"></svg>
+
+<svg class='graph graph-detail' style="position:absolute; left:318px; top:273px; width:640px; height:480px;"></svg>
+<!-- end 中間東西 -->
+
+
+<div class='overlay-button' style=" position:absolute; left:517px; top:756px; width:248px; height:56.974px; font-size:27px; text-align: center; margin-bottom:40px;">
+  <div class="title" style="margin:8px;">
+    <a href="{% url 'jobs_gov_data' %}">搜尋/分析其他職位</a>
+  </div>
+</div>

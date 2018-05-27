@@ -100,7 +100,7 @@
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_35.jpg' %}); position:absolute; left:392px; top:319px; width:304px; height:109px;" title="">
 	</div>
-	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_36.jpg' %}); position:absolute; left:862px; top:355px; width:327px; height:73px;" title="">
+	<div id="search_top" style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_36.jpg' %}); position:absolute; left:862px; top:355px; width:327px; height:73px;" title="">
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_37.jpg' %}); position:absolute; left:64px; top:385px; width:22px; height:575px;" title="">
 	</div>
@@ -228,9 +228,9 @@
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_72.jpg' %}); position:absolute; left:403px; top:803px; width:49px; height:21px;" title="">
 		{% if list.has_previous %}
 			{% if paginator_link %}
-				<a href="{{ paginator_link}}&page={{ list.previous_page_number }}">previous</a>
+				<a href="{{ paginator_link}}&page={{ list.previous_page_number }}#search_top">previous</a>
 			{% else %}
-				<a href="?page={{ list.previous_page_number }}">previous</a>
+				<a href="?page={{ list.previous_page_number }}#search_top">previous</a>
 			{% endif %}
 		{% endif %}
 	</div>
@@ -242,11 +242,11 @@
 		{% if list.has_next %}
 			{% if paginator_link %}
 				{% if list.next_page_number > 0 %}
-				<a href="{{ paginator_link}}&page={{ list.next_page_number  }}">next</a>
+				<a href="{{ paginator_link}}&page={{ list.next_page_number  }}#search_top">next</a>
 				{% endif %}
 
 			{% else %}
-				<a href="?page={{ list.next_page_number  }}">next</a>
+				<a href="?page={{ list.next_page_number}}#search_top">next</a>
 			{% endif %}
 		{% endif %}
 	</div>

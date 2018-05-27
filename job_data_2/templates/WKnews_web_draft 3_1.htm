@@ -9,67 +9,61 @@
 <div style="background-image:url({% static 'job/image/images/homepage-background.jpg'%}); position:absolute; left:0px; top:0px; width:1280px; height:960px;">
 {% include 'navbar.htm' %}
 
-
-
-
-
-
-
-
-<form action="{% url 'added' %}" method="post">
+<form id='job-form' action="{% url 'added' %}" method="post">
 	 {% csrf_token %}
-<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_12.jpg' %}); position:absolute; left:373px; top:430px; width:267px; height:26px;" title="">
+<div class="form-company" style="position:absolute; left:373px; top:430px; width:267px; height:26px;" title="">
 	{{ form.company }}<!-- 公司名稱 -->
 </div>
 
-<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_14.jpg' %}); position:absolute; left:649px; top:430px; width:186px; height:26px;" title="">
+
+<div style="position:absolute; left:649px; top:430px; width:186px; height:26px;" title="">
 	{{ form.industry }}<!-- 行業 -->
 </div>
 
-<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_18.jpg' %}); position:absolute; left:373px; top:465px; width:267px; height:26px;" title="">
+<div style="position:absolute; left:373px; top:465px; width:267px; height:26px;" title="">
 	{{ form.jobTitle }}<!-- 職位名稱 -->
 </div>
 
 
-	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_19.jpg' %}); position:absolute; left:649px; top:465px; width:186px; height:26px;" title="">
+	<div style="position:absolute; left:649px; top:465px; width:186px; height:26px;" title="">
 		{{ form.place }}<!-- 工作地點 -->
 	</div>
 
-	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_22.jpg' %}); position:absolute; left:373px; top:499px; width:72px; height:27px;" title="">
+	<div style="position:absolute; left:373px; top:499px; width:72px; height:27px;" title="">
 		{{ form.job_type }}<!-- 全職 -->
 	</div>
 
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_23.jpg' %}); position:absolute; left:445px; top:499px; width:268px; height:27px;" title="">
+		<div style="position:absolute; left:445px; top:499px; width:268px; height:27px; background-color: RGB(252, 238, 33);" title="">
 			{{ form.date_number }}<!-- 工作天數 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_25.jpg' %}); position:absolute; left:720px; top:499px; width:66px; height:27px;" title="">
+		<div style="position:absolute; left:720px; top:499px; width:66px; height:27px;" title="">
 			{{ form.gender }}<!-- 性別 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_29.jpg' %}); position:absolute; left:373px; top:534px; width:530px; height:26px;" title="">
+		<div style="position:absolute; left:373px; top:534px; width:530px; height:26px;" title="">
 			{{ form.latest_year }}<!-- 你最近從事這份工作的年份（例如由2014年做到2016年，請填2016；如現正從事這份工作，請填2017年） -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_32.jpg' %}); position:absolute; left:373px; top:568px; width:104px; height:27px;" title="">
+		<div style="position:absolute; left:373px; top:568px; width:104px; height:27px; background-color: RGB(252, 238, 33);">
 			{{ form.salary_period }}<!-- 支薪形式 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_34.jpg' %}); position:absolute; left:483px; top:568px; width:268px; height:27px;" title="">
+		<div style="position:absolute; left:483px; top:568px; width:268px; height:27px;" title="">
 			{{ form.salary }}<!-- 薪金 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_38.jpg' %}); position:absolute; left:373px; top:603px; width:104px; height:26px;" title="">
+		<div style="position:absolute; left:373px; top:603px; width:104px; height:26px;" title="">
 			{{ form.year }}<!-- 行業年資 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_40.jpg' %}); position:absolute; left:373px; top:637px; width:288px; height:27px;" title="">
+		<div style="position:absolute; left:373px; top:637px; width:288px; height:27px;" title="">
 			{{ form.contract_hour }}<!-- 合約列明一周工時（如沒有合約或沒有標明，請填0） -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_42.jpg' %}); position:absolute; left:670px; top:637px; width:233px; height:27px;" title="">
+		<div style="position:absolute; left:670px; top:637px; width:233px; height:27px;" title="">
 			{{ form.week_total_hour }}<!-- 一周實際工時 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_45.jpg' %}); position:absolute; left:373px; top:672px; width:104px; height:26px;" title="">
+		<div style="position:absolute; left:373px; top:672px; width:104px; height:26px;" title="">
 			{{ form.OT_frequency }}<!-- 加班情況 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_47.jpg' %}); position:absolute; left:483px; top:672px; width:104px; height:26px;" title="">
+		<div style="position:absolute; left:483px; top:672px; width:114px; height:26px; background-color: RGB(252, 238, 33);">
 			{{ form.OT_payment }}<!-- *加班補償 -->
 		</div>
-		<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_47.jpg' %}); position:absolute; left:603px; top:672px; width:104px; height:26px;" title="">
+		<div style="position:absolute; left:603px; top:672px; width:104px; height:26px;" title="">
 			{{ form.date }}<!-- *加班補償 -->
 		</div>
 
@@ -87,8 +81,173 @@
 
 	</form>
 
+	<div style="position:absolute; left:515px; top:745px; width:358px; height:70.124px; font-size:12px; color: RGB(252, 238, 33)" >
+
+	<div id="overlay">
+	  {% include 'homepage_overlay.html' %}
+	</div>
+
+
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://d3js.org/queue.v1.min.js"></script>
+	<script src="https://d3js.org/topojson.v1.min.js"></script>
+	<script>
+	$('#job-form').on('submit', function(event){
+    event.preventDefault();
+
+    on()
+	});
+
+	function on() {
+		var raw_data = $('#job-form').serializeArray()
+		console.log(raw_data);
+		form_data = {
+			"company": raw_data[1]['value'],
+			"industry": raw_data[2]['value'],
+			"jobTitle": raw_data[3]['value'],
+			"location2": raw_data[4]['value'],
+			"salary_type":raw_data[5]['value'],
+			"week_total_hour":raw_data[13]['value'],
+			"working_day_number":raw_data[6]['value'],
+			"week_salary":raw_data[10]['value']
+		}
+		$('.overlay-company').text(form_data["company"])
+		$('.overlay-industry').text(form_data["industry"])
+		$('.overlay-jobTitle').text(form_data["jobTitle"])
+		$('.overlay-location2').text(form_data["location2"])
+		$('.overlay-salary_type').text(form_data["salary_type"])
+		$('.overlay-week_total_hour').text(form_data["week_total_hour"])
+		$('.overlay-working_day_number').text(form_data["working_day_number"])
+		$('.overlay-week_salary').text(form_data["week_salary"])
+
+		$.ajax({
+			url : "{% url 'added' %}", // the endpoint
+			type : "POST", // http method
+			data : {
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				"company": form_data['company'],
+				"industry": form_data['industry'],
+				"jobTitle": form_data['jobTitle'],
+				"location2": form_data['location2'],
+				"salary_type":form_data['salary_type'],
+				"week_total_hour":form_data['week_total_hour'],
+				"working_day_number":form_data['workinworking_day_number'],
+				"week_salary":form_data['week_salary']
+			}, // data sent with the post request
+
+			// handle a successful response
+			success : function(json) {
+				// var data = json['json_classification']
+				console.log(json['json_classification']);
+				// var data =json['json_classification']
+
+				var data = $.parseJSON(json['json_classification'])
+				var svg = d3.select('svg.graph')
+				var svg_title_1 = d3.select('svg.title_1')
+
+				// [0-5, 5-10, ...]
+				var object_array = $.map(data, d=>[d.range])
+
+				var number_max = d3.max(data, d=>d.number)
+
+				var xScale = d3.scaleOrdinal()
+												.domain([0,500])
+												.range([0,740])
+
+				var yScale = d3.scaleLinear().domain([0, number_max]).range([300, 0])
+
+				var width = 640,
+				 height = number_max;
+				bar_width = 42
+
+				svg.append('g')
+					 .attr('class', 'chart_group')
+					 .attr('transform', 'translate(15,100)')
+
+				// title
+				 svg_title_1.append('text')
+					 .text('與所有'+json['category']+'組別工時相比')
+					 .attr('y',15)
+					 // .attr('x',100)
+					 .style("font-size", "16.5px")
+					 .style("fill", "RGB(252, 238, 33)")
+
+				// bar
+				svg.select('.chart_group')
+					 .selectAll('rect.bar')
+						.data(data)
+						.enter().append('rect')
+						.attr('transform', 'translate(0,0)')
+						.classed('bar', true)
+						.attr('x', (d, i) => i*bar_width)
+						.attr('width', 20)
+						.attr('y', d=> yScale(d.number))
+						.attr('height', d=> yScale(height-d.number) )
+						.style('fill', d => d.color);
+
+				// x axis
+					svg.select('.chart_group')
+						.selectAll('rect.bar')
+						.select('text')
+						.data(data)
+						.enter().append('text')
+						.text(d=>d.range)
+						.attr('x', (d,i)=>i*bar_width)
+						.attr('y',318)
+						.style("font-size", "10px")
+						.style('fill',' RGB(252, 238, 33)')
+
+				svg.select('.chart_group')
+					 .append('text')
+					 .text('小時')
+					 .attr('x',width/2-width/10)
+					 .attr('y',340)
+					 .style('fill',' RGB(252, 238, 33)')
+
+				yAxis = d3.axisLeft()
+									.scale(yScale)
+
+				d3.select('svg')
+					.select('.chart_group')
+					.append('g')
+					.attr('transform', 'translate(40,00)')
+					.attr('id', 'yAxisG')
+					.call(yAxis)
+
+					d3.select('svg')
+						.select('.chart_group')
+						.append('text')
+						.text('人數')
+						.attr('x', 10)
+						.attr('y',-10)
+
+				var fullWidth = 600;
+				var fullHeight = 250;
+				var margin = {
+					top: 15,
+					right: 15,
+					left: 50,
+					bottom: 50
+				};
+			},
+
+			// handle a non-successful response
+			error : function(xhr,errmsg,err) {
+					console.log('fuck')
+				}
+			});
+	    document.getElementById("overlay").style.display = "block";
+	}
+
+	function off() {
+	    document.getElementById("overlay").style.display = "none";
+	}
+	</script>
+
 
 </body>
 </html>
+
+
 
 <link rel="stylesheet" type="text/css" href="{% static 'job/css/open_job_form.css' %}" />
