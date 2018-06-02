@@ -18,29 +18,39 @@ class Search_Bar_Form(forms.Form):
     以下是form的內容
     """
     keyword = forms.CharField(
-        required=False,
         widget=forms.TextInput(attrs={'placeholder': '職位'}),
         max_length=30,
         label='')
 
     industry = forms.CharField(
-        widget=forms.Select(choices=INDUSTRY_LIST), label='', initial='all'
+        widget=forms.Select(choices=INDUSTRY_LIST), required=False, label='', initial='all'
     )
     location = forms.CharField(
-        widget=forms.Select(choices=DISTRICT_LIST), label='', initial='all'
+        widget=forms.Select(choices=DISTRICT_LIST), required=False, label='', initial='all'
     )
 
     salary_type = forms.CharField(
-        widget=forms.Select(choices=SALARY_TYPE_LIST), label='', initial='all'
+        widget=forms.Select(choices=SALARY_TYPE_LIST), required=False, label='', initial='all'
     )
 
     salary_filter = forms.CharField(
-        widget=forms.Select(choices=SALARY_FILTER), label='', initial='all'
+        widget=forms.Select(choices=SALARY_FILTER), required=False, label='', initial='all'
     )
 
     salary = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '薪金'}),
         max_length=30,
+        label='',
+        required=False,
+        )
+
+    upper_limit = forms.CharField(
+        max_length=10,
+        label='',
+        required=False,
+        )
+    lower_limit = forms.CharField(
+        max_length=10,
         label='',
         required=False,
         )

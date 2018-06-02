@@ -240,16 +240,17 @@ def ajax_order(request):
 def get_search(request, position=None, industry=None, location=None, salary=None, salary_type=None, salary_filter=None):
 
     search_form = Search_Bar_Form(request.GET)
+    print("This is the form data:{}".format(request.GET))
     position = request.GET.get('keyword')
     industry = request.GET.get('industry')
     location = request.GET.get('location')
-    salary_up = request.GET.get('input-with-keypress-0')
-    salary_low = request.GET.get('input-with-keypress-1')
+    upper_limit = request.GET.get('upper_limit')
+    lower_limit = request.GET.get('lower_limit')
     salary_type = request.GET.get('salary_type')
-    data_get_list = [position, industry, location, salary_up, salary_low, salary_type]
+    data_get_list = [position, industry, location, upper_limit, lower_limit, salary_type]
     print (data_get_list)
 
-    paginator_link = "?keyword={}&industry={}&location={}&salary_type={}&salary_up={}&salary_low={}".format(position.encode('utf8'), industry, location.encode('utf8'), salary_type.encode('utf8'), salary_up, salary_low)
+    paginator_link = "?keyword={}&industry={}&location={}&salary_type={}&upper_limit={}&lower_limit={}".format(position.encode('utf8'), industry, location.encode('utf8'), salary_type.encode('utf8'), upper_limit, lower_limit)
 
     data_list = labor_gov_model
     # return HttpResponse(data_get_list)
@@ -262,8 +263,8 @@ def get_search(request, position=None, industry=None, location=None, salary=None
         data_list = data_list.filter(location2=location)
     if salary_type:
         data_list = data_list.filter(salary_type=salary_type)
-    if salary_up and salary_low:
-        data_list = data_list.filter(money__gte=salary_low).filter(money__lte=salary_up)
+    if upper_limit and lower_limit:
+        data_list = data_list.filter(money__gte=lower_limit).filter(money__lte=upper_limit)
 
     """paginator"""
     paginator = Paginator(data_list, 10) # Show 25 contacts per page
@@ -298,6 +299,7 @@ def get_search(request, position=None, industry=None, location=None, salary=None
 def search(request):
     if request.method == "POST":
         search_form = Search_Bar_Form(request.POST)
+
         if search_form.is_valid():
             position = search_form.cleaned_data['keyword']
             industry = search_form.cleaned_data['industry']

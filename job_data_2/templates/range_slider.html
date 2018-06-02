@@ -2,19 +2,20 @@
 	<div id="keypress" class="noUi-target noUi-rtl noUi-horizontal">
   </div>
 </div>
-	<input type="text" id="input-with-keypress-1">
-	<input type="text" id="input-with-keypress-0">
-
+<div>
+	<input type="text" id="input-with-keypress-1" value={{ form.lower_limit }}
+	<input type="text" id="input-with-keypress-0" value={{ form.upper_limit }}
+</div>
 <script>
 var keypressSlider = document.getElementById('keypress');
-var input1 = document.getElementById('input-with-keypress-0');
-var input0 = document.getElementById('input-with-keypress-1');
+var input1 = document.getElementById('input-with-keypress-1');
+var input0 = document.getElementById('input-with-keypress-0');
 var inputs = [input1, input0];
 
 noUiSlider.create(keypressSlider, {
 	start: [0, 20000],
 	connect: true,
-	direction: 'rtl',
+	direction: 'ltr',
 	// tooltips: [fals, wNumb({ decimals: 1 })],
 	range: {
 		'min': 0,

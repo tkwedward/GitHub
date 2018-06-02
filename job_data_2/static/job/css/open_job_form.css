@@ -1,6 +1,12 @@
 #id_gender {
   width: 66px; }
 
+#id_date_number {
+  width: 268px; }
+
+#id_OT_payment {
+  width: 114px; }
+
 #id_salary_period, #id_OT_frequency {
   width: 104px; }
 
