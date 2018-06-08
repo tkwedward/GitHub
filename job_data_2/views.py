@@ -88,39 +88,92 @@ def Freelance_add(request):
     return render(request, 'freelance_form.html', {'form': form})
 
 #功能
+"""
+type 是從 salary 或 working_hour 二選一
+field1是放入由ajax 傳送過來的form中其中的field value，如果是 type 是 salary，這裏的field value會是工時，否則就是none
+"""
+category_model=None
+
+def statistic(type, field1, data_list, model=None, form=None, step=None):
+    # 這裏的field1 是薪金形態
+    if type == 'salary':
+        model_used = model.filter(salary_type=form['salary_period'])
+
+    # 這裏的field1是 money或是 week_total_hour
+    avg =model.aggregate(average=Avg(field1))
+    max_list = model.aggregate(maximum=Max(field1))
+    mini_list = model.aggregate(minimum=Min(field1))
+    # 這裏是想取回這個例子的instance，例如清潔工的工作時間和人工是多少
+    print(form)
+    instance_data = float(form[type])
+
+    # 這兩個是用來計算graph中x-axis的最小和最大值
+    range_min = int(math.floor(float(mini_list['minimum'])))
+    range_max = int(math.ceil(float(max_list['maximum'])))
+
+    # the following is for data generation
+    for x in range(range_min, range_max, step):
+        if instance_data>=x-step and instance_data<x+step:
+            color = 'RGB(247,147,30)'
+        else:
+            color = 'RGB(252, 238, 33)'
+        print(x, color)
+
+        if type == 'salary':
+            length = len(model.filter(money__gte=float(x-step)).filter(money__lt=float(x+step)))
+            data_list.append({'range':'{}-{}'.format(math.floor(x/1000), math.floor((x+step)/1000)), 'number':length, 'color':color})
+        else:
+            length = len(model.filter(week_total_hour__gte=float(x-step)).filter(week_total_hour__lt=float(x+step)))
+            data_list.append({'range':'{}-{}'.format(x, x+step), 'number':length, 'color':color})
+        # salary_classification.append({'range':'{}-{}'.format(x, x+5000), 'number':length, 'color':color})
+        print({'range':'{}-{}'.format(x, x+step), 'number':length, 'color':color})
+
+
+
+    return data_list
+    # 返回 instance 的資料, 使用了的model，最小值和最大值
+
+
 
 @require_POST
 def added(request):
     form = request.POST.dict()
-    category_model = labor_gov_model.filter(industry='商用服務業')
-    average = category_model.aggregate(average=Avg('week_total_hour'))
-    maximum = category_model.aggregate(maximum=Max('week_total_hour'))
-    minimum = category_model.aggregate(minimum=Min('week_total_hour'))
-    model = labor_gov.objects.all()
+    category_model = labor_gov_model.filter(industry=form['industry'])
 
     """傳送的data︰
     時間︰min, max, average
     組別︰category
     """
-    range_min = int(math.floor(float(minimum['minimum'])))
-    range_max = int(math.ceil(float(maximum['maximum'])))
-    classification = []
+    salary_classification = []
+    salary_step = None
+    salary_start_value = None
+    salary_color=None
+    hour_classification = []
+    hour_step = 5
+    hour_start_value = 0
+    hour_color=None
 
-    step = 5
-    instance_hour = float(form['week_total_hour'])
-    for x in range(1, range_max, step):
-        if instance_hour>=x-1 and instance_hour<x+4:
-            color = 'RGB(247,147,30)'
-        else:
-            color = 'RGB(252, 238, 33)'
+    if (form['salary_period']=='月薪'):
+        salary_step = 5000
+    elif (form['salary_period']=='日薪'):
+        salary_step = 50
+    elif (form['salary_period']=='時薪'):
+        salary_step = 10
 
-        length = len(category_model.filter(week_total_hour__gte=float(x-1)).filter(week_total_hour__lt=float(x+4)))
-        classification.append({'range':'{}-{}'.format(x-1, x+4), 'number':length, 'color':color})
+    # money
+    salary_classification = json.dumps(statistic(type='salary', field1='money', data_list=salary_classification, model=category_model, form=form, step=salary_step))
 
-        json_classification = json.dumps(classification)
-        # print json_classification
+    # working hour
+    hour_classification = json.dumps(statistic(type='week_total_hour', field1='week_total_hour', data_list=hour_classification, model=category_model, form=form, step=hour_step))
+    print(hour_classification)
+    print(salary_classification)
 
-    return JsonResponse({'form': form, 'json_classification':json_classification, 'category': form['industry']})
+    return JsonResponse({
+        'form': form,
+        'hour_classification':hour_classification,
+        'salary_classification':salary_classification,
+        'category': form['industry']}
+        )
 
 def success(request):
     return HttpResponse('success')
