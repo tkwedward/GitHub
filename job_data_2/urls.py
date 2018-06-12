@@ -1,7 +1,7 @@
 #coding:utf-8#-*-
 
 from django.conf.urls import url
-from .views import homepage, get_name_2, added, search,  Freelance_add, jobs_gov_data, jobs_gov_data_detail, ajax_order, add_json_data, get_search, success, about_us
+from .views import homepage, get_name_2, added,  Freelance_add, jobs_gov_data, jobs_gov_data_detail, add_json_data, get_search, success, about_us
 
 
 urlpatterns = [
@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^freelance_added$', Freelance_add, name="freelance_added"),
     # url(r'^search/*', search, name="search"),
     url(r'^search/*', get_search, name="search"),
-    url(r'^ajax_order', ajax_order, name="ajax_order"),
 
 
     # show jobs

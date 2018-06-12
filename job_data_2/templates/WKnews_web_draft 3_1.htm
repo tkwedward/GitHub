@@ -1,5 +1,5 @@
 {% load static %}
-<!-- saved from url=(0113)file:///Users/mac/Library/Caches/Save%20For%20Web%20AI/WKnews%20web%20draft%203_006/WKnews%20web%20draft%203.html -->
+
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>你覺唔覺得自己Under Paid?</title>
 
@@ -29,7 +29,7 @@
 		{{ form.place }}<!-- 工作地點 -->
 	</div>
 
-	<div style="position:absolute; left:373px; top:499px; width:72px; height:27px;" title="">
+	<div style="position:absolute; left:373px; top:499px; width:65px; height:27px;" title="">
 		{{ form.job_type }}<!-- 全職 -->
 	</div>
 
@@ -98,9 +98,17 @@
     on()
 	});
 // JSON.parse()
+<!--
+
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("loader-text").style.display = "none";
+  document.getElementById("myDiv").style.display = "block";
+}
+
 	function on() {
 		var raw_data = $('#job-form').serializeArray()
-		console.log(raw_data);
 		form_data = {
 			"company": raw_data[1]['value'],
 			"industry": raw_data[2]['value'],
@@ -145,15 +153,20 @@
 				// var data = json['json_classification']
 				// console.log(json['json_classification']);
 				// var data =json['json_classification']
-
-				var hour_data = $.parseJSON(json['hour_classification'])
-				var salary_data = $.parseJSON(json['salary_classification'])
-
 				var svg_1 = d3.select('svg.graph_1')
 				var svg_title_1 = d3.select('svg.title_1')
 
 				var svg_2 = d3.select('svg.graph_2')
 				var svg_title_2 = d3.select('svg.title_2')
+
+
+				// svg_2.selectAll("*").remove();
+
+				myVar = setTimeout(showPage, 3000);
+				var hour_data = $.parseJSON(json['hour_classification'])
+				var salary_data = $.parseJSON(json['salary_classification'])
+
+
 
 
 				// [0-5, 5-10, ...]
@@ -204,7 +217,7 @@
 						.enter().append('text')
 						.text(d=>d.range)
 						.attr('x', (d,i)=>i*bar_width)
-						.attr('y',210)
+						.attr('y',318)
 						.style("font-size", "10px")
 						.style('fill',' RGB(252, 238, 33)')
 
@@ -331,13 +344,75 @@ d3.select('svg')
 
 	function off() {
 	    document.getElementById("overlay").style.display = "none";
+			// d3.select('.graph_1 *, .title_1 *').remove();
+			// d3.select('.graph_2 *, .title_2 *').remove();
+			d3.selectAll('g').remove();
 	}
 	</script>
 
 
 </body>
 </html>
+<style>
+#loader{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid RGB(252, 238, 33);
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
 
+#loader-text {
+	position: absolute;
+  left: 46%;
+  top: 65%;
+	font-size: 20px;
+	width: 120px;
+  height: 120px;
+}
 
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 }
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+</style>
 
 <link rel="stylesheet" type="text/css" href="{% static 'job/css/open_job_form.css' %}" />

@@ -59,25 +59,27 @@
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_23.jpg' %}); position:absolute; left:1003px; top:237px; width:186px; height:9px;" title="">
 	</div>
-	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_26.jpg' %}); position:absolute; left:1070px; top:246px; width:7px; height:39px;" title="">
-	</div>
 	<div style="position:absolute; left:727px; top:246px; width:267px; height:26px;" title="">
 		<!-- 地點 -->
 		{{form.location}}
 	</div>
-	<div style="position:absolute; left:1003px; top:246px; width:186px; height:26px;" title="">
+	<div style="position:absolute; left:1003px; top:246px; width:67px; height:26px;" title="">
 		<!-- 年薪 -->
 		{{form.salary_type}}
 
 	</div>
-
+	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_26.jpg' %}); position:absolute; left:1070px; top:246px; width:7px; height:39px;" title="">
+	</div>
+	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_27.jpg' %}); position:absolute; left:1077px; top:246px; width:112px; height:26px;" title="">
+		薪金
+	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_28.jpg' %}); position:absolute; left:727px; top:272px; width:267px; height:13px;" title="">
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_29.jpg' %}); position:absolute; left:1003px; top:272px; width:67px; height:13px;" title="">
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_30.jpg' %}); position:absolute; left:1077px; top:272px; width:112px; height:13px;" title="">
 	</div>
-	<input style="position:absolute; left:727px; top:285px; width:58px; height:26px;" type="submit" value="提交" />
+	<input style="position:absolute; left:727px; top:285px; width:58px; height:26px;" type="submit" value="提交表格" />
 	</div>
 
 
@@ -138,68 +140,25 @@
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_54.jpg' %}); position:absolute; left:825px; top:428px; width:8px; height:532px;" title="">
 	</div>
-
+	<div class="job_row_header job_row_header_money" style="position:absolute; left:833px; top:428px; width:129px; height:26px;" title="">
+		薪金 <form action="{% url 'search' %}"><span class="tri" data-type='money' data-order='none'>&#9660;</span><form>
+	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_56.jpg' %}); position:absolute; left:962px; top:428px; width:7px; height:532px;" title="">
 	</div>
-
+	<div class="job_row_header job_row_header_working_day_number" style="position:absolute; left:969px; top:428px; width:110px; height:26px;" title="">
+		每週天數 <form action="{% url 'search' %}"><span class="tri" data-type='working_day_number_float' data-order='none'>&#9660;</span><form>
+	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_58.jpg' %}); position:absolute; left:1079px; top:428px; width:8px; height:532px;" title="">
 	</div>
-	<div class="job_row_header job_row_header_money" style="position:absolute; left:833px; top:428px; width:129px; height:26px;" title="">
-		薪金 <span class="tri glyphicon glyphicon-triangle-bottom" data-type='money' data-order='-'></span>
-	</div>
-	<div class="job_row_header job_row_header_working_day_number" style="position:absolute; left:969px; top:428px; width:110px; height:26px;" title="">
-		每週天數 <span class="tri glyphicon glyphicon-triangle-bottom" data-type='working_day_number_float' data-order='-'></span>
-	</div>
 	<div class="job_row_header job_row_header_week_total_hour" style="position:absolute; left:1087px; top:428px; width:110px; height:26px;" title="">
-		每週工時 <span class="tri glyphicon glyphicon-triangle-bottom" data-type='working_hours_number_float' data-order='-'>
-		</span>
+		每週工時 <form action="{% url 'search' %}"><span class="tri" data-type='working_hours_number_float' data-order='none'>&#9660;</span><form>
 	</div>
 
 	<script>
 		$('.tri').click(function(){
-			var position = $('#id_keyword').val()
-	    var industry = $('#id_industry').val()
-	    var location = $('#id_location').val()
-	    var upper_limit = $('#input-with-keypress-0').val()
-	    var lower_limit = $('#input-with-keypress-1').val()
-	    var salary_type = $('#id_salary_type').val()
-	    var order = $(this).attr('data-order')
-	    var type = $(this).attr('data-type')
-	    // var symbol = $(this).text()
-
-			var previous_order= $(this).attr('data-order')
-			var previous_symbol= $(this).attr('class')
-			console.log(previous_order, previous_symbol);
-
-			var previous_order = previous_order == '-' ? '' : '-'
-			var previous_symbol= previous_symbol == 'tri glyphicon glyphicon-triangle-bottom' ? 'tri glyphicon glyphicon-triangle-top':'tri glyphicon glyphicon-triangle-bottom'
-			console.log(previous_order, previous_symbol);
-
-			$(this).attr('data-order', previous_order);
-			$(this).attr('class', previous_symbol);
-
-			data = {
-				'position':position,
-				'industry':industry,
-				'location':location,
-				'upper_limit':upper_limit,
-				'lower_limit':lower_limit,
-				'salary_type':salary_type,
-				'order':order,
-				'type':type,
-				// 'symbol':symbol
-			}
-
-			$.ajax({
-				type: "GET",
-				url: "{% url 'search' %}",
-				data: data,
-				success: function(result) {
-						// 改變data table中的 data_list 和 pagination
-						$(".data_table_bundle").html(result['html'])
-					}
-		});
-
+			var type = $(this).attr('data-type')
+			var order = $(this).attr('data-order')
+			var symbol = $(this).text()
 		})
 	</script>
 
@@ -225,16 +184,76 @@
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_68.jpg' %}); position:absolute; left:284px; top:801px; width:318px; height:2px;" title="">
 	</div>
 
+	<div class="data_table" style="position:absolute; left:86px; top:454px; width:1111px; height:506px; margin-top:7.376px;">
+		{% for object in list %}
+		<div class="job_row" style="height:25.229px; margin-bottom:7.376px"><!-- 每一行 -->
+			<div class="job_row_box job_row_box_jobTitle" style="position:absolute; width:190px; height:25.229px;">
+					<a href="{{ object.get_absolute_url }}">{{ object.jobTitle }}</a>
+			</div>
+
+			<div class="job_row_box job_row_box_company" style=" position:absolute; left:198px; width:300px; height:25.229px;" title="">
+				{{ object.company }}
+				<!-- 公司名稱 -->
+			</div>
+			<div class="job_row_box job_row_box_location2" style="position:absolute; height:25.229px;" title="">
+				{{ object.location2 }} <!-- 地點 -->
+			</div>
+			<div class="job_row_box job_row_box_industry" style="position:absolute; left:654px; width:83px; height:25.229px;" title="">
+				{{ object.industry }}<!-- 行業 -->
+			</div>
+			<div class="job_row_box job_row_box_money" style="position:absolute; left:747px; width:129px; height:25.229px;" title="">
+				{% if object.money %}
+				{{object.salary_type}}${{ object.money }}
+				{% else %}
+				{{ object.salary}}
+				{% endif %}<!-- 薪金 -->
+			</div>
+			<div class="job_row_box job_row_box_working_day_number" style="position:absolute; left:883px; width:110px; height:25.229px;" title="">
+				{{ object.working_day_number }}<!-- 每週工作天數 -->
+			</div>
+			<div class="job_row_box job_row_box_week_total_hour" style=" position:absolute; left:1001px; width:110px; height:25.229px;" title="">
+				{{ object.week_total_hour }}小時<!-- 每週工作時數 -->
+			</div>
+		</div><!-- 每一行 -->
+		{% endfor %}
+	</div><!-- 資料table -->
+
+
+
+
+	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_69.jpg' %}); position:absolute; left:602px; top:801px; width:83px; height:26px;" title="">
+		Go to page #
+	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_70.jpg' %}); position:absolute; left:685px; top:801px; width:50px; height:159px;" title="">
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_71.jpg' %}); position:absolute; left:284px; top:803px; width:119px; height:157px;" title="">
 	</div>
-
+	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_72.jpg' %}); position:absolute; left:403px; top:803px; width:49px; height:21px;" title="">
+		{% if list.has_previous %}
+			{% if paginator_link %}
+				<a href="{{ paginator_link}}&page={{ list.previous_page_number }}#search_top">previous</a>
+			{% else %}
+				<a href="?page={{ list.previous_page_number }}#search_top">previous</a>
+			{% endif %}
+		{% endif %}
+	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_73.jpg' %}); position:absolute; left:452px; top:803px; width:150px; height:1px;" title="">
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_74.jpg' %}); position:absolute; left:452px; top:804px; width:85px; height:156px;" title="">
 	</div>
+	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_75.jpg' %}); position:absolute; left:537px; top:804px; width:50px; height:20px;" title="">
 
+		{% if list.has_next %}
+			{% if paginator_link %}
+				{% if list.next_page_number > 0 %}
+				<a href="{{ paginator_link}}&page={{ list.next_page_number  }}#search_top">next</a>
+				{% endif %}
+
+			{% else %}
+				<a href="?page={{ list.next_page_number}}#search_top">next</a>
+			{% endif %}
+		{% endif %}
+	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_76.jpg' %}); position:absolute; left:587px; top:804px; width:15px; height:156px;" title="">
 	</div>
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_77.jpg' %}); position:absolute; left:403px; top:824px; width:49px; height:136px;" title="">
@@ -245,11 +264,6 @@
 	<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_79.jpg' %}); position:absolute; left:602px; top:827px; width:83px; height:133px;" title="">
 
 	</div>
-<div class="data_table_bundle">
-{% include 'data_table.html' %}
 </div>
-</body>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</html>
+
+</body></html>

@@ -15,8 +15,6 @@
     <a href="{% url 'jobs_gov_data' %}">查看時薪</a>
     <a href="{% url 'about_us' %}">關於我們</a>
   </div>
-  <div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_04.jpg' %}); position:absolute; left:439px; top:12px; width:841px; height:29px;" title="">
-  </div>
   <div style="position:absolute; left:1125px; top:12px; width:120px; height:29px; font-size:15px">
     {% if user.is_authenticated %}
       <a href="{% url 'logout' %}">登出 </a>

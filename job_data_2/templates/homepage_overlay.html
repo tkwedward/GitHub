@@ -1,3 +1,7 @@
+<div id="loader-bundle">
+<div id="loader"></div>
+<div id="loader-text">分析中⋯⋯</div>
+</div>
 
 <div class="close-button" onclick="off()" style="position:absolute; left:1100px; top:20px; width:22px; height:22px; font-size:22px">
 	&#10006;
@@ -66,7 +70,7 @@
 	</div>
 </div> <!-- search list -->
 
-
+<div style="display:none;" id="myDiv" class="animate-bottom">
 <!-- start 中間東西 -->
 <svg class='title_1 graph-detail' style="position:absolute; left:533px; top:254px; width:240px; height:20px;"></svg>
 
@@ -82,4 +86,5 @@
   <div class="title" style="margin:8px;">
     <a href="{% url 'jobs_gov_data' %}">搜尋/分析其他職位</a>
   </div>
-</div>
+	</div>
+</div><!-- myDiv -->
