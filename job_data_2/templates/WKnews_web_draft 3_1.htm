@@ -1,5 +1,5 @@
 {% load static %}
-
+<!-- saved from url=(0113)file:///Users/mac/Library/Caches/Save%20For%20Web%20AI/WKnews%20web%20draft%203_006/WKnews%20web%20draft%203.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>你覺唔覺得自己Under Paid?</title>
 
@@ -29,7 +29,7 @@
 		{{ form.place }}<!-- 工作地點 -->
 	</div>
 
-	<div style="position:absolute; left:373px; top:499px; width:65px; height:27px;" title="">
+	<div style="position:absolute; left:373px; top:499px; width:72px; height:27px;" title="">
 		{{ form.job_type }}<!-- 全職 -->
 	</div>
 
@@ -97,30 +97,20 @@
 
     on()
 	});
-// JSON.parse()
-<!--
-
-
-function showPage() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("loader-text").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
 
 	function on() {
 		var raw_data = $('#job-form').serializeArray()
+		console.log(raw_data);
 		form_data = {
 			"company": raw_data[1]['value'],
 			"industry": raw_data[2]['value'],
 			"jobTitle": raw_data[3]['value'],
 			"location2": raw_data[4]['value'],
 			"salary_type":raw_data[5]['value'],
-			"working_day_number":raw_data[6]['value'],
-			"salary_period":raw_data[9]['value'],
-			"week_salary":raw_data[10]['value'],
 			"week_total_hour":raw_data[13]['value'],
+			"working_day_number":raw_data[6]['value'],
+			"week_salary":raw_data[10]['value']
 		}
-
 		$('.overlay-company').text(form_data["company"])
 		$('.overlay-industry').text(form_data["industry"])
 		$('.overlay-jobTitle').text(form_data["jobTitle"])
@@ -139,40 +129,26 @@ function showPage() {
 				"industry": form_data['industry'],
 				"jobTitle": form_data['jobTitle'],
 				"location2": form_data['location2'],
-				"salary_type":form_data['salary_period'],
-				// "salary_period":form_data['salary_periody'],
-				"salary_period":raw_data[9]['value'],
+				"salary_type":form_data['salary_type'],
 				"week_total_hour":form_data['week_total_hour'],
 				"working_day_number":form_data['workinworking_day_number'],
-				"salary":raw_data[10]['value'],
-
+				"week_salary":form_data['week_salary']
 			}, // data sent with the post request
 
 			// handle a successful response
 			success : function(json) {
 				// var data = json['json_classification']
-				// console.log(json['json_classification']);
+				console.log(json['json_classification']);
 				// var data =json['json_classification']
-				var svg_1 = d3.select('svg.graph_1')
+
+				var data = $.parseJSON(json['json_classification'])
+				var svg = d3.select('svg.graph')
 				var svg_title_1 = d3.select('svg.title_1')
 
-				var svg_2 = d3.select('svg.graph_2')
-				var svg_title_2 = d3.select('svg.title_2')
-
-
-				// svg_2.selectAll("*").remove();
-
-				myVar = setTimeout(showPage, 3000);
-				var hour_data = $.parseJSON(json['hour_classification'])
-				var salary_data = $.parseJSON(json['salary_classification'])
-
-
-
-
 				// [0-5, 5-10, ...]
-				var object_array = $.map(hour_data, d=>[d.range])
+				var object_array = $.map(data, d=>[d.range])
 
-				var number_max = d3.max(hour_data, d=>d.number)
+				var number_max = d3.max(data, d=>d.number)
 
 				var xScale = d3.scaleOrdinal()
 												.domain([0,500])
@@ -184,7 +160,7 @@ function showPage() {
 				 height = number_max;
 				bar_width = 42
 
-				svg_1.append('g')
+				svg.append('g')
 					 .attr('class', 'chart_group')
 					 .attr('transform', 'translate(15,100)')
 
@@ -197,9 +173,9 @@ function showPage() {
 					 .style("fill", "RGB(252, 238, 33)")
 
 				// bar
-				svg_1.select('.chart_group')
+				svg.select('.chart_group')
 					 .selectAll('rect.bar')
-						.data(hour_data)
+						.data(data)
 						.enter().append('rect')
 						.attr('transform', 'translate(0,0)')
 						.classed('bar', true)
@@ -210,10 +186,10 @@ function showPage() {
 						.style('fill', d => d.color);
 
 				// x axis
-					svg_1.select('.chart_group')
+					svg.select('.chart_group')
 						.selectAll('rect.bar')
 						.select('text')
-						.data(hour_data)
+						.data(data)
 						.enter().append('text')
 						.text(d=>d.range)
 						.attr('x', (d,i)=>i*bar_width)
@@ -221,7 +197,7 @@ function showPage() {
 						.style("font-size", "10px")
 						.style('fill',' RGB(252, 238, 33)')
 
-				svg_1.select('.chart_group')
+				svg.select('.chart_group')
 					 .append('text')
 					 .text('小時')
 					 .attr('x',width/2-width/10)
@@ -245,85 +221,6 @@ function showPage() {
 						.attr('x', 10)
 						.attr('y',-10)
 
-// ------------end of graph 1-------------
-
-// [0-5, 5-10, ...]
-var object_array = $.map(salary_data, d=>[d.range])
-
-var number_max = d3.max(salary_data, d=>d.number)
-
-var xScale = d3.scaleOrdinal()
-                .domain([0,500])
-                .range([0,740])
-
-var yScale = d3.scaleLinear().domain([0, number_max]).range([300, 0])
-
-var width = 640,
- height = number_max;
-bar_width = 42
-
-svg_2.append('g')
-   .attr('class', 'chart_group')
-   .attr('transform', 'translate(15,100)')
-
-// title
- svg_title_2.append('text')
-   .text('與所有'+json['category']+'組別工資相比')
-   .attr('y',15)
-   // .attr('x',100)
-   .style("font-size", "16.5px")
-   .style("fill", "RGB(252, 238, 33)")
-
-// bar
-svg_2.select('.chart_group')
-   .selectAll('rect.bar')
-    .data(salary_data)
-    .enter().append('rect')
-    .attr('transform', 'translate(0,0)')
-    .classed('bar', true)
-    .attr('x', (d, i) => i*bar_width)
-    .attr('width', 20)
-    .attr('y', d=> yScale(d.number))
-    .attr('height', d=> yScale(height-d.number) )
-    .style('fill', d => d.color);
-
-// x axis
-  svg_2.select('.chart_group')
-    .selectAll('rect.bar')
-    .select('text')
-    .data(salary_data)
-    .enter().append('text')
-    .text(d=>d.range)
-    .attr('x', (d,i)=>i*bar_width)
-    .attr('y',318)
-    .style("font-size", "10px")
-    .style('fill',' RGB(252, 238, 33)')
-
-svg_2.select('.chart_group')
-   .append('text')
-   .text('港元(千)')
-   .attr('x',width/2-width/10)
-   .attr('y',340)
-   .style('fill',' RGB(252, 238, 33)')
-
-yAxis = d3.axisLeft()
-          .scale(yScale)
-
-d3.select('svg')
-  .select('.chart_group')
-  .append('g')
-  .attr('transform', 'translate(40,00)')
-  .attr('id', 'yAxisG')
-  .call(yAxis)
-
-  d3.select('svg')
-    .select('.chart_group')
-    .append('text')
-    .text('人數')
-    .attr('x', 10)
-    .attr('y',-10)
-
-
 				var fullWidth = 600;
 				var fullHeight = 250;
 				var margin = {
@@ -344,75 +241,13 @@ d3.select('svg')
 
 	function off() {
 	    document.getElementById("overlay").style.display = "none";
-			// d3.select('.graph_1 *, .title_1 *').remove();
-			// d3.select('.graph_2 *, .title_2 *').remove();
-			d3.selectAll('g').remove();
 	}
 	</script>
 
 
 </body>
 </html>
-<style>
-#loader{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index: 1;
-  width: 150px;
-  height: 150px;
-  margin: -75px 0 0 -75px;
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid RGB(252, 238, 33);
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-}
 
-#loader-text {
-	position: absolute;
-  left: 46%;
-  top: 65%;
-	font-size: 20px;
-	width: 120px;
-  height: 120px;
-}
 
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Add animation to "page content" */
-.animate-bottom {
-  position: relative;
-  -webkit-animation-name: animatebottom;
-  -webkit-animation-duration: 1s;
-  animation-name: animatebottom;
-  animation-duration: 1s
-}
-
-@-webkit-keyframes animatebottom {
-  from { bottom:-100px; opacity:0 }
-  to { bottom:0px; opacity:1 }
-}
-
-@keyframes animatebottom {
-  from{ bottom:-100px; opacity:0 }
-  to{ bottom:0; opacity:1 }
-}
-
-#myDiv {
-  display: none;
-  text-align: center;
-}
-</style>
 
 <link rel="stylesheet" type="text/css" href="{% static 'job/css/open_job_form.css' %}" />

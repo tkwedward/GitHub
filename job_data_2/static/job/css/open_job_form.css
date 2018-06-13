@@ -22,10 +22,13 @@
 #id_latest_year {
   width: 530px; }
 
-#id_job_type {
-  width: 65px; }
-
 .submit {
-  font-size: 27px; }
+  font-size: 27px;
+  font-family: "source-han-serif-tc";
+ }
 
+.form-company{
+  font-size: 16px;
+
+}
 /*# sourceMappingURL=open_job_form.css.map */

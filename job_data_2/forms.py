@@ -22,12 +22,11 @@ class Search_Bar_Form(forms.Form):
         max_length=30,
         label='')
 
-    location = forms.CharField(
-        widget=forms.Select(choices=DISTRICT_LIST), required=False, label='', initial='all'
-    )
-
     industry = forms.CharField(
         widget=forms.Select(choices=INDUSTRY_LIST), required=False, label='', initial='all'
+    )
+    location = forms.CharField(
+        widget=forms.Select(choices=DISTRICT_LIST), required=False, label='', initial='all'
     )
 
     salary_type = forms.CharField(

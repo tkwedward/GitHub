@@ -7,7 +7,6 @@ from django.db.models import Count, Avg, Max, Min
 import math
 from django.contrib.auth.models import User
 from django.templatetags.static import static
-from django.template.loader import render_to_string
 import json
 from itertools import chain
 import re, datetime
@@ -89,109 +88,89 @@ def Freelance_add(request):
     return render(request, 'freelance_form.html', {'form': form})
 
 #功能
-"""
-type 是從 salary 或 working_hour 二選一
-field1是放入由ajax 傳送過來的form中其中的field value，如果是 type 是 salary，這裏的field value會是工時，否則就是none
-"""
-category_model=None
-
-def statistic(type, field1, data_list, model=None, form=None, step=None):
-    # 這裏的field1 是薪金形態
-    if type == 'salary':
-        model_used = model.filter(salary_type=form['salary_period'])
-    model_used = model.filter(salary_type='月薪')
-    # 這裏的field1是 money或是 week_total_hour
-    avg =model_used.aggregate(average=Avg(field1))
-    max_list = model_used.aggregate(maximum=Max(field1))
-    mini_list = model_used.aggregate(minimum=Min(field1))
-
-    # 這裏是想取回這個例子的instance，例如清潔工的工作時間和人工是多少
-    instance_data = float(form[type])
-
-    # 這兩個是用來計算graph中x-axis的最小和最大值
-    range_min = int(math.floor(float(mini_list['minimum'])))
-    range_max = int(math.ceil(float(max_list['maximum'])))
-
-    global combine_length
-    global combine_number
-    combine_length = 0
-    combine_number = set()
-    max_bar = 13
-    # the following is for data generation
-    for counter ,x in enumerate(range(range_min, range_max, step)):
-        if instance_data>=x-step and instance_data<x+step:
-            color = 'RGB(247,147,30)'
-        else:
-            color = 'RGB(252, 238, 33)'
-        # print(x, color)
-        if type == 'salary':
-            if counter > max_bar:
-                combine_number.add(math.floor(x/1000))
-                combine_number.add(math.floor((x+step)/1000))
-                sorted(combine_number, key=float)
-                combine_length+= len(model.filter(money__gte=float(x-step)).filter(money__lt=float(x+step)))
-            else:
-                length = len(model.filter(money__gte=float(x-step)).filter(money__lt=float(x+step)))
-                data_list.append({'range':'{}-{}'.format(math.floor(x/1000), math.floor((x+step)/1000)), 'number':length, 'color':color})
-        else:
-            length = len(model.filter(week_total_hour__gte=float(x-step)).filter(week_total_hour__lt=float(x+step)))
-            data_list.append({'range':'{}-{}'.format(x, x+step), 'number':length, 'color':color})
-
-    if type == 'salary' and len(data_list)>max_bar:
-        last_item = '{}以上'.format(min(combine_number))
-        print(last_item, combine_length)
-        data_list.append({'range':last_item, 'number':combine_length, 'color':color})
-        # print({'range':'{}-{}'.format(x, x+step), 'number':length, 'color':color})
-        # salary_classification.append({'range':'{}-{}'.format(x, x+5000), 'number':length, 'color':color})
-        # print({'range':'{}-{}'.format(x, x+step), 'number':length, 'color':color})
-
-    return data_list
-    # 返回 instance 的資料, 使用了的model，最小值和最大值
-
-
 
 @require_POST
 def added(request):
     form = request.POST.dict()
-    category_model = labor_gov_model.filter(industry=form['industry'])
+    category_model = labor_gov_model.filter(industry='商用服務業')
+    average = category_model.aggregate(average=Avg('week_total_hour'))
+    maximum = category_model.aggregate(maximum=Max('week_total_hour'))
+    minimum = category_model.aggregate(minimum=Min('week_total_hour'))
+    model = labor_gov.objects.all()
 
     """傳送的data︰
     時間︰min, max, average
     組別︰category
     """
-    salary_classification = []
-    salary_step = None
-    salary_start_value = None
-    salary_color=None
-    hour_classification = []
-    hour_step = 5
-    hour_start_value = 0
-    hour_color=None
+    range_min = int(math.floor(float(minimum['minimum'])))
+    range_max = int(math.ceil(float(maximum['maximum'])))
+    classification = []
 
-    if (form['salary_period']=='月薪'):
-        salary_step = 2000
-    elif (form['salary_period']=='日薪'):
-        salary_step = 50
-    elif (form['salary_period']=='時薪'):
-        salary_step = 10
+    step = 5
+    instance_hour = float(form['week_total_hour'])
+    for x in range(1, range_max, step):
+        if instance_hour>=x-1 and instance_hour<x+4:
+            color = 'RGB(247,147,30)'
+        else:
+            color = 'RGB(252, 238, 33)'
 
-    # money
-    salary_classification = json.dumps(statistic(type='salary', field1='money', data_list=salary_classification, model=category_model, form=form, step=salary_step))
+        length = len(category_model.filter(week_total_hour__gte=float(x-1)).filter(week_total_hour__lt=float(x+4)))
+        classification.append({'range':'{}-{}'.format(x-1, x+4), 'number':length, 'color':color})
 
-    # working hour
-    hour_classification = json.dumps(statistic(type='week_total_hour', field1='week_total_hour', data_list=hour_classification, model=category_model, form=form, step=hour_step))
-    # print(hour_classification)
-    # print(salary_classification)
+        json_classification = json.dumps(classification)
+        # print json_classification
 
-    return JsonResponse({
-        'form': form,
-        'hour_classification':hour_classification,
-        'salary_classification':salary_classification,
-        'category': form['industry']}
-        )
+    return JsonResponse({'form': form, 'json_classification':json_classification, 'category': form['industry']})
 
 def success(request):
     return HttpResponse('success')
+
+def jobs_gov_data(request):
+    categories_list = labor_gov_model.values_list('category').distinct()
+    CATEGORY_CHOICES = list()
+    for x in categories_list:
+        CATEGORY_CHOICES.append(x[0])
+
+    data_list = labor_gov.objects.exclude(week_total_hour=0.0)
+
+    order_desired =  request.get_full_path().split('/')[-1]
+    print(order_desired)
+    if order_desired == 'work-time-dashboard':
+        data_list = labor_gov.objects.all().order_by('-week_total_hour').exclude(week_total_hour=0.0)
+        # data_list.order_by('-week_total_hour')
+    elif order_desired == 'salary-dashboard':
+        data_list = labor_gov.objects.all().order_by('-money').exclude(week_total_hour=0.0)
+
+
+
+    # data_list = labor_gov.objects.all()
+
+    """paginator"""
+    paginator = Paginator(data_list, 10) # Show 25 contacts per page
+
+    page = request.GET.get('page')
+
+    if page is None:
+        page = 1
+
+    if int(page)-5 >0 :
+        show_page_list = [int(page)+x-5 for x in range(11)]
+        print (show_page_list)
+    else:
+        show_page_list = [1+x for x in range(11)]
+
+    try:
+        data_show = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        data_show = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        data_show = paginator.page(paginator.num_pages)
+
+    search_form = Search_Bar_Form()
+
+    return render(request, 'search_page.htm', {'list': data_show, 'form': search_form, 'category_list':CATEGORY_CHOICES, 'show_page_list':show_page_list})
 
 def jobs_gov_data_detail(request, model_name, id):
     if model_name == 'collected_data':
@@ -235,13 +214,49 @@ def jobs_gov_data_detail(request, model_name, id):
 
     return render(request, 'analysis.html', {'instance': instance, 'average':average, 'maximum':maximum, 'minimum':minimum, 'classification':classification, 'json_classification':json_classification, 'model':model_name, 'category': instance.category})
 
+# @login_required
+# @require_POST
+def ajax_order(request):
+    position = request.POST.get('position')
+    industry = request.POST.get('industry')
+    location = request.POST.get('location')
+    salary = request.POST.get('salary')
+    salary_type = request.POST.get('salary_type')
+    action = request.POST.get('action')
+    action_id = request.POST.get('id')
+    data_list = labor_gov_model.order_by('location2')[0:20]
+    if position:
+         data_list.filter(jobTitle__contains=position)
+    if industry and industry!='all':
+        data_list = data_list.filter(industry=industry)
+    if location and location!='all':
+        data_list = data_list.filter(location2=location)
+    if salary_type:
+        data_list.filter(salary_type=salary_type)
 
+    template = render(request, 'list_table.html', {'list': data_list})
+    return JsonResponse({'template':template.content})
 
-# 用來在 search function 之中，找出想要display 出來的data list
-def get_data_list(position, industry, location, upper_limit, lower_limit, salary_type, data_list_order_by="", data_list_sort_by="", data_list=labor_gov_model):
-    print('I am using get_data_list')
+def get_search(request, position=None, industry=None, location=None, salary=None, salary_type=None, salary_filter=None):
+
+    search_form = Search_Bar_Form(request.GET)
+    print("This is the form data:{}".format(request.GET))
+    position = request.GET.get('keyword')
+    industry = request.GET.get('industry')
+    location = request.GET.get('location')
+    upper_limit = request.GET.get('upper_limit')
+    lower_limit = request.GET.get('lower_limit')
+    salary_type = request.GET.get('salary_type')
+    data_get_list = [position, industry, location, upper_limit, lower_limit, salary_type]
+    print (data_get_list)
+
+    paginator_link = "?keyword={}&industry={}&location={}&salary_type={}&upper_limit={}&lower_limit={}".format(position.encode('utf8'), industry, location.encode('utf8'), salary_type.encode('utf8'), upper_limit, lower_limit)
+
+    data_list = labor_gov_model
+    # return HttpResponse(data_get_list)
     if position:
         data_list = data_list.filter(jobTitle__contains=position)
+        print ('s')
     if industry and industry!='all':
         data_list = data_list.filter(industry=industry)
     if location and location!='all':
@@ -251,114 +266,77 @@ def get_data_list(position, industry, location, upper_limit, lower_limit, salary
     if upper_limit and lower_limit:
         data_list = data_list.filter(money__gte=lower_limit).filter(money__lte=upper_limit)
 
-    data_list_order_by = "" if data_list_order_by is None else data_list_order_by
-
-    data_list_sort_by = "" if data_list_sort_by is None else data_list_sort_by
-
-    result = data_list_order_by + data_list_sort_by
-
-    if result =="":
-        pass
-    else:
-        data_list=data_list.order_by(result)
-    return data_list
-
-def get_data_from_the_url(request):
-    print('I am using get_data_from_the_url')
-    position = request.GET.get('keyword')
-    print('here is the position: {}'.format(position))
-    industry = request.GET.get('industry')
-    location = request.GET.get('location')
-    upper_limit = request.GET.get('upper_limit')
-    lower_limit = request.GET.get('lower_limit')
-    salary_type = request.GET.get('salary_type')
-    data_list_order_by = request.GET.get('order')
-    data_list_sort_by = request.GET.get('type')
-    page = request.GET.get('page')
-    print(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by)
-    return position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by
-
-def get_paginator_link(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by):
-    paginator_link = "keyword={}&industry={}&location={}&salary_type={}&upper_limit={}&lower_limit={}&data_list_order_by={}&data_list_sort_by={}".format(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by)
-    return paginator_link
-
-def get_Paginator(data_list, request):
+    """paginator"""
     paginator = Paginator(data_list, 10) # Show 25 contacts per page
-    page = request.GET.get('page')
 
+    page = request.GET.get('page')
     if page is None:
         page = 1
+
     if paginator.num_pages < 11:
         number_page_show = paginator.num_pages
     else:
         number_page_show = 11
+
     if int(page)-5 >0 :
         show_page_list = [int(page)+x-5 for x in range(number_page_show)]
+
     else:
         show_page_list = [1+x for x in range(number_page_show)]
+
     try:
         data_show = paginator.page(page)
     except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
         data_show = paginator.page(1)
     except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
         data_show = paginator.page(paginator.num_pages)
-    return data_show, show_page_list
+
+    return render(request, 'search_page.htm', {'list': data_show, 'form':search_form, 'paginator_link':paginator_link, 'show_page_list':show_page_list})
 
 
-def jobs_gov_data(request):
-    data_list = labor_gov.objects.exclude(week_total_hour=0.0)
+def search(request):
+    if request.method == "POST":
+        search_form = Search_Bar_Form(request.POST)
 
-    data_show, show_page_list = get_Paginator(data_list, request)
+        if search_form.is_valid():
+            position = search_form.cleaned_data['keyword']
+            industry = search_form.cleaned_data['industry']
+            location = search_form.cleaned_data['location']
+            salary = search_form.cleaned_data['salary']
+            salary_type = search_form.cleaned_data['salary_type']
 
-    search_form = Search_Bar_Form()
+            data_list = labor_gov_model
+            print (salary_type)
+            if position:
+                data_list = data_list.filter(jobTitle__contains=position)
+            if industry and industry!='all':
+                data_list = data_list.filter(industry=industry)
+            if location and location!='all':
+                data_list = data_list.filter(location2=location)
+            if salary_type:
+                data_list = data_list.filter(salary_type=salary_type)
+            if salary:
+                data_list = data_list.filter(money__gte=salary)
 
-    position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by = get_data_from_the_url(request)
+            """paginator"""
+            paginator = Paginator(data_list, 25) # Show 25 contacts per page
 
-    paginator_link = get_paginator_link(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by)
+            page = request.GET.get('page')
+            try:
+                data_show = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                data_show = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                data_show = paginator.page(paginator.num_pages)
 
-    return render(request, 'search_page.htm', {'list': data_show, 'form': search_form, 'paginator_link':paginator_link, #'category_list':CATEGORY_CHOICES,
-    'show_page_list':show_page_list})
-
-
-
-def get_search(request, position="", industry="", location="", salary="", salary_type="", salary_filter="", data_list_order_by="", data_list_sort_by=""):
-
-    data_list = []
-    if request.is_ajax():
-        print('I am using get_search_ajax')
-        position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by = get_data_from_the_url(request)
-        # symbol = request.GET.get('symbol')
-
-        data_list = get_data_list(position, industry, location, upper_limit, lower_limit, salary_type, data_list_order_by, data_list_sort_by)
-        """paginator"""
-        data_show, show_page_list = get_Paginator(data_list, request)
-
-        paginator_link = get_paginator_link(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by)
-
-        # print (request.GET)
-        # print(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by, symbol)
-        html = render_to_string('data_table.html', {'list': data_show, 'show_page_list':show_page_list, 'paginator_link':paginator_link})
-        # print(html)
-
-        return HttpResponse(json.dumps({'html':html}), content_type='application/json')
-        # return render(request, 'search_page.htm', {})
+            return render(request, 'list_view2.html', {'list': data_show, 'form':search_form})
     else:
-        print('-------------------')
-        print('I am using get_search function and not ajax')
-        print('-------------------')
-        search_form = Search_Bar_Form(request.GET)
-        position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by = get_data_from_the_url(request)
-        # symbol = request.GET.get('symbol')
-        # data_get_list = [position, industry, location, upper_limit, lower_limit, salary_type]
-
-        paginator_link = get_paginator_link(position, industry, location, salary_type, upper_limit, lower_limit, data_list_order_by, data_list_sort_by)
-
-        data_list = get_data_list(position, industry, location, upper_limit, lower_limit, salary_type, data_list_order_by, data_list_sort_by)
-
-        """paginator"""
-        data_show, show_page_list = get_Paginator(data_list, request)
-        # print(data_show, show_page_list, data_list)
-        return render(request, 'search_page.htm', {'list': data_show, 'form':search_form, 'paginator_link':paginator_link, 'show_page_list':show_page_list})
+        search_form = Search_Bar_Form()
+        return render(request, 'list_view2.html', {'form': search_form})
 
 def add_json_data(request):
     name_cat = u'生產/工廠職位'
