@@ -30,42 +30,10 @@ select{
   border-style: solid;
   border-color: RGB(252, 238, 33);
   border-image: initial;
-  // -webkit-appearance: none;
-  // -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   height: 26px;
   padding: 5px;
-}
-.job_row_header{
-  background: RGB(252, 238, 33)
-  // background-color: black
-}
-.job_row_header_jobTitle, .job_row_box_jobTitle{
-  width: 190px;
-  height:26px;
-}
-.job_row_header_company, .job_row_box_company{
-  width:300px;
-  height: 26px;
-}
-.job_row_header_location2, .job_row_box_location2{
-  width:142px;
-  height: 26px;
-  left:590px;
-}
-
-.job_row_box_location2{
-  left:505px;
-}
-// .job_row_header_money
-// .job_row_header_industry
-// .job_row_header_week_total_hour
-// .job_row_header_working_day_number
-
-.tri{
-  float: right;
-  position: relative;
-  right: 5px;
-
 }
 
 .job_row_box{

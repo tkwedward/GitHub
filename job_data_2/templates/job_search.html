@@ -1,0 +1,54 @@
+{% extends "job_base.html" %}
+{% block content %}
+
+<div class="container-fluid latest-bg-1"><!-- 1st row -->
+  <div class="row">
+    <h1> 查看工時、薪資</h1>
+    <a href="#">最新資料</a>
+    <a href="#">工時排行</a>
+    <a href="#">時薪排行</a>
+  </div>
+</div>
+
+
+<div class="container latest-bg-2"><!-- 2st row -->
+  <div class="row">
+
+
+    <form action="{% url 'search' %}" method="get">
+      <label for="user_name">您的名字</label>
+      <input id="user_name" type="text" name="user_name" value="{{keyword}}">
+      <input type="submit" value="搜尋">
+    </form>
+
+
+
+    <table>
+      <tr>
+        <th>公司名稱</th>
+        <th>職稱</th>
+        <th>一週總工時</th>
+        <th>加班頻率</th>
+        <th>薪資</th>
+        <th>估計時薪</th>
+        <th>參考時間</th>
+
+      </tr>
+
+      {% for object in result %}
+      <tr>
+
+        <td data-th="公司名稱"><span class="rwd-td"><a href="#">{{ object.company }}</a></span></td>
+        <td data-th="職稱"><span class="rwd-td"><a href="#">{{ object.position }}</a></span></td>
+        <td><span class="rwd-td">{{ object.company }}</span></td>
+        <td data-th="加班頻率"><span class="rwd-td"><span>{{ object.OT }}</span></td>
+        <td data-th="薪資"><span class="rwd-td">{{ object.salary }} / 月</span></td>
+        <td data-th="估計時薪"><span class="rwd-td"><span>277 元</span></td>
+        <td data-th="參考時間"><span class="rwd-td">{{ object.date }}</span></td>
+      </tr>
+
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}

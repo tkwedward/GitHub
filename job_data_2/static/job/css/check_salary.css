@@ -5,10 +5,46 @@
   width: 186px; }
 
 #id_salary_type {
-  width: 186px; }
+  width: 67px; }
 
 #input-with-keypress-0, #input-with-keypress-1 {
-  width: 160px;
   text-align: center; }
+
+h1 {
+  font-size: 55px;
+  line-height: 69px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 10px;
+  text-align: left;
+  color: #534741;
+  z-index: 2;
+}
+
+h2 {
+  font-size: 30px;
+  color: #534741;
+  margin:0;
+  z-index: 2;
+}
+
+p {
+  color: #534741;
+  font-size: 18px;
+  margin-top: 0;
+}
+
+p.heading{
+  color: #534741;
+  font-size: 14px;
+  text-align: left;
+}
+
+.buttontext{
+  background-color: #534741;
+  color: #FCEE21;
+  font-family: "source-han-serif-tc";
+}
+
 
 /*# sourceMappingURL=check_salary.css.map */

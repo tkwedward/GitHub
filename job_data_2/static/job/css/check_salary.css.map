@@ -1,6 +1,6 @@
 {
 "version": 3,
-"mappings": "AAAA,yBAAyB;EACvB,KAAK,EAAC,KAAK;;AAGb,YAAY;EACV,KAAK,EAAE,KAAK;;AAGd,eAAe;EACb,KAAK,EAAE,KAAK;;AAGd,8CAA8C;EAC5C,KAAK,EAAE,KAAK;EACZ,UAAU,EAAE,MAAM",
+"mappings": "AAAA,yBAAyB;EACvB,KAAK,EAAC,KAAK;;AAGb,YAAY;EACV,KAAK,EAAE,KAAK;;AAGd,eAAe;EACb,KAAK,EAAE,IAAI;;AAGb,8CAA8C;EAC5C,UAAU,EAAE,MAAM",
 "sources": ["check_salary.scss"],
 "names": [],
 "file": "check_salary.css"
