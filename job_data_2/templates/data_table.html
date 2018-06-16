@@ -1,0 +1,105 @@
+{% load static %}
+<!-- data from view list,  -->
+
+<div class="data_table" style="position:absolute; left:86px; top:454px; width:1111px; height:506px; margin-top:7.376px;">
+  {% for object in list %}
+  <div class="job_row" style="height:25.229px; margin-bottom:7.376px"><!-- 每一行 -->
+    <div class="job_row_box job_row_box_jobTitle" style="position:absolute; width:190px; height:25.229px;">
+        <a href="{{ object.get_absolute_url }}">{{ object.jobTitle }}</a>
+    </div>
+
+    <div class="job_row_box job_row_box_company" style=" position:absolute; left:198px; width:300px; height:25.229px;" title="">
+      {{ object.company }}
+      <!-- 公司名稱 -->
+    </div>
+    <div class="job_row_box job_row_box_location2" style="position:absolute; height:25.229px;" title="">
+      {{ object.location2 }} <!-- 地點 -->
+    </div>
+    <div class="job_row_box job_row_box_industry" style="position:absolute; left:654px; width:83px; height:25.229px;" title="">
+      {{ object.industry }}<!-- 行業 -->
+    </div>
+    <div class="job_row_box job_row_box_money" style="position:absolute; left:747px; width:129px; height:25.229px;" title="">
+      {% if object.money %}
+      {{object.salary_type}}${{ object.money }}
+      {% else %}
+      {{ object.salary}}
+      {% endif %}<!-- 薪金 -->
+    </div>
+    <div class="job_row_box job_row_box_working_day_number" style="position:absolute; left:883px; width:110px; height:25.229px;" title="">
+      {{ object.working_day_number }}<!-- 每週工作天數 -->
+    </div>
+    <div class="job_row_box job_row_box_week_total_hour" style=" position:absolute; left:1001px; width:110px; height:25.229px;" title="">
+      {{ object.week_total_hour }}小時<!-- 每週工作時數 -->
+    </div>
+  </div><!-- 每一行 -->
+  {% endfor %}
+</div><!-- 資料table -->
+<div style="background-image:url({% static 'job/image/images/WKnews-web-draft-3_search_72.jpg' %}); position:absolute; left:284px; top:791px; width:597px; height:36px;" title="">
+</div>
+<div style="position:absolute; left:602px; top:801px; width:83px; height:26px;" title="">
+  <span>page {{list.number}}</span>
+
+</div>
+
+
+
+  {% if list.has_previous %}
+    <div class="last" style="background-image:url({% static 'job/image/images/left_arrow.svg' %}) ;position:absolute; left:403px; top:803px; width:50px; height:21px;" title="" data-page="{{ list.previous_page_number }}">>
+    </div>
+      <!-- <a href="?{{ paginator_link}}&page={{ list.previous_page_number }}#search_top">previous</a> -->
+  {% endif %}
+
+
+
+
+  {% if list.has_next %}
+    {% if paginator_link %}
+      {% if list.next_page_number > 0 %}
+      <div class='next' style="background-image:url({% static 'job/image/images/right_arrow.svg' %}); position:absolute; left:537px; top:804px; width:49px; height:20px;" title="" data-page="{{ list.next_page_number }}">
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</div>
+
+<script>
+
+  $('.next, .last').click(function() {
+
+    console.log(order, type);
+    var position = $('#id_keyword').val()
+    var industry = $('#id_industry').val()
+    var location = $('#id_location').val()
+    var upper_limit = $('#input-with-keypress-0').val()
+    var lower_limit = $('#input-with-keypress-1').val()
+    var salary_type = $('#id_salary_type').val()
+    var page = $(this).attr('data-page')
+
+    data = {
+      'keyword':position,
+      'industry':industry,
+      'location':location,
+      'upper_limit':upper_limit,
+      'lower_limit':lower_limit,
+      'salary_type':salary_type,
+      'order':order,
+      'type':type,
+      'page':page,
+      // 'symbol':symbol
+    }
+
+    console.log(data);
+
+    $.ajax({
+      type: "GET",
+      url: "{% url 'search' %}",
+      data: data,
+      success: function(result) {
+
+          // 改變data table中的 data_list 和 pagination
+          k =result['html']
+          // console.log(k);
+          $(".data_table_bundle").html(k)
+        }
+  }); // end of ajax
+  })
+</script>

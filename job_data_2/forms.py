@@ -17,16 +17,20 @@ class Search_Bar_Form(forms.Form):
     """
     以下是form的內容
     """
+
     keyword = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': '職位'}),
         max_length=30,
-        label='')
+        label='',
+        required=False
+        )
+
+    location = forms.CharField(
+        widget=forms.Select(choices=DISTRICT_LIST), required=False, label='', initial='all'
+    )
 
     industry = forms.CharField(
         widget=forms.Select(choices=INDUSTRY_LIST), required=False, label='', initial='all'
-    )
-    location = forms.CharField(
-        widget=forms.Select(choices=DISTRICT_LIST), required=False, label='', initial='all'
     )
 
     salary_type = forms.CharField(
@@ -84,12 +88,15 @@ class FreelanceForm(forms.ModelForm):
         fields = '__all__'
 
 class ContactForm(forms.ModelForm):
-    company = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '公司名稱'}))
+
+    company = forms.CharField(
+    widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'公司名稱'}),
+    )
 
     industry = forms.ChoiceField(widget=forms.Select(), choices=INDUSTRY_LIST, label='', initial='all')
 
     # 職位名稱
-    jobTitle = forms.CharField(widget=forms.TextInput(attrs={ 'placeholder': '職位名稱'}))
+    jobTitle = forms.CharField(widget=forms.TextInput(attrs={ 'placeholder': u'職位名稱'}))
 
     # 工作地點
     place = forms.ChoiceField(widget=forms.Select(), choices=DISTRICT_LIST, label='', initial='all')
@@ -98,32 +105,36 @@ class ContactForm(forms.ModelForm):
     job_type = forms.ChoiceField(widget=forms.Select(), choices=TYPES_CHOICES, label='', initial='')
 
      # 工作天數
-    date_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '工作天數'}))
+    date_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': u'工作天數'}))
 
 
     # 性別
     gender=forms.ChoiceField(widget=forms.Select(), choices=SEX_CHOICES, label='', initial='')
 
     # 你最近從事這份工作的年份
-    latest_year = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '你最近從事這份工作的年份（例如由2014年做到2016年，請填2016；如現正從事這份工作，請填2017年）'}))
+    latest_year = forms.CharField(widget=forms.TextInput(attrs={'placeholder': u'你最近從事這份工作的年份（例如由2014年做到2016年，請填2016；如現正從事這份工作，請填2017年）'}))
 
 
     # 支薪周期
     salary_period = forms.ChoiceField(widget=forms.Select(), choices=SALARY_TYPE_LIST, label='')
 
     # 行業年資
-    year = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '行業年資'}))
+    year = forms.CharField(widget=forms.TextInput(attrs={'placeholder': u'行業年資'}))
 
     # 合約列明一周工時
-    contract_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '合約列明一周工時（如沒有合約或沒有標明，請填0）'}))
+    contract_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': u'合約列明一周工時（如沒有合約或沒有標明，請填0）'}))
 
     OT_payment = forms.ChoiceField(widget=forms.Select(), choices=OTP_CHOICES, label='')
 
     #
     OT_frequency = forms.ChoiceField(widget=forms.Select(), choices=OT_CHOICES)
 
-    week_total_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '一周實際工時'}))
+    week_total_hour = forms.CharField(widget=forms.TextInput(attrs={'placeholder': u'一周實際工時'}))
+
     date = forms.DateField(initial=datetime.today())
+
+
+
     class Meta:
         model = collected_data
         widgets = {
@@ -136,12 +147,16 @@ class ContactForm(forms.ModelForm):
         }
 
         error_messages = {
-            'company': {
-                'required': '請填入資料'
-            },
+                'company':{
+                    'required': '請填入資料'
+                }
         }
 
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['company'].error_messages = {'required': 'custom required message'}
 
 class LoginForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
